@@ -8,4 +8,12 @@ public class BookEditor {
     private JTextField authorNameField;
     private JComboBox genreComboBox;
     private JCheckBox isTakenCheckBox;
+    private JLabel titleLabel;
+    private JLabel authorLabel;
+    private JLabel genreLabel;
+
+    public BookEditor() {
+
+    }
+
 }
