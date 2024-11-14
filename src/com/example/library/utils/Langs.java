@@ -4,13 +4,15 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class Langs {
 
     private static int numLangs;
-    private Vector<Vector<String>> langs;
-    private Vector<Vector<ImageIcon>> images;
+    private Map<String, Vector<String>> langs;
+    private Map<String, Vector<ImageIcon>> images;
 
     public Langs(String file) {
         FileReader fr = null;
@@ -21,12 +23,12 @@ public class Langs {
             BufferedReader br = new BufferedReader(fr);
 
             numLangs = Integer.parseInt(br.readLine());
-            langs = new Vector<>();
-            images = new Vector<>();
+            langs = new HashMap<>();
+            images = new HashMap<>();
 
             for (int i = 0; i < numLangs; i++) {
                 Vector<String> lang = new Vector<>();
-                lang.add(br.readLine());
+                String langAux = br.readLine();
                 int numWords = Integer.parseInt(br.readLine());
                 for (int j = 0; j < numWords; j++) {
                     lang.add(br.readLine());
@@ -38,8 +40,8 @@ public class Langs {
                     imagesAux.add(new ImageIcon(br.readLine()));
                 }
 
-                langs.add(lang);
-                images.add(imagesAux);
+                langs.put(langAux, lang);
+                images.put(langAux, imagesAux);
             }
 
         } catch (IOException e) {
@@ -47,19 +49,19 @@ public class Langs {
         }
     }
 
-    public Vector<Vector<String>> getLangs() {
+    public Map<String, Vector<String>> getLangs() {
         return langs;
     }
 
-    public Vector<String> getLang(int index) {
+    public Vector<String> getLang(String index) {
         return langs.get(index);
     }
 
-    public Vector<Vector<ImageIcon>> getImages() {
+    public Map<String, Vector<ImageIcon>> getImages() {
         return images;
     }
 
-    public Vector<ImageIcon> getImagesLang(int index) {
+    public Vector<ImageIcon> getImagesLang(String index) {
         return images.get(index);
     }
 
