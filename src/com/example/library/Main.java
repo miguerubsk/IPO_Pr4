@@ -20,7 +20,7 @@ public class Main {
                         System.out.println("Book Title: " + book.getName());
                         System.out.println("Author: " + book.getAuthor().getName());
                         System.out.println("Genre: " + book.getGenre());
-                        System.out.println("Is Unavailable: " + book.isTaken());
+                        System.out.println("Is Unavailable: " + book.hasImage());
                     }
                 });
             }

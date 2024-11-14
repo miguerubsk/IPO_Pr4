@@ -3,27 +3,29 @@ package com.example.library;
 import java.util.Date;
 
 public class Book {
-    private Author author;
-    private Genre genre;
+    private String author;
+    private String genre;
     private String name;
-    private boolean isTaken;
+    private String imgPath;
+    private boolean hasImage;
 
-    public Book(Author author, Genre genre, Date publishedOn, String name) {
+    public Book(String name, String author, String genre, String imgPath) {
         this.author = author;
         this.genre = genre;
         this.name = name;
-        this.isTaken = false;
+        this.imgPath = imgPath;
+        this.hasImage = imgPath != null;
     }
 
     public Book() {
 
     }
 
-    public Author getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public Genre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
@@ -31,16 +33,23 @@ public class Book {
         return name;
     }
 
-    public boolean isTaken() {
-        return isTaken;
+    public boolean hasImage() {
+        return hasImage;
     }
-    public void setTaken(boolean taken) {
-        isTaken = taken;
+
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 
     public void setName(String bookName) {
+        this.name = bookName;
     }
 
-    public void setGenre(Genre genre) {
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

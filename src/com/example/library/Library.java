@@ -2,7 +2,6 @@ package com.example.library;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.*;
 
 public class Library {
     private List<Book> books;
@@ -41,7 +40,7 @@ public class Library {
     public List<Book> getAvailableBooks() {
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
-            if (!book.isTaken()) {
+            if (!book.hasImage()) {
                 result.add(book);
             }
         }

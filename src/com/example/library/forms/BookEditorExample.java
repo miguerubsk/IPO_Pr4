@@ -57,15 +57,15 @@ public class BookEditorExample extends JFrame{
     private void saveChanges() {
         String authorName = authorNameField.getText();
         String bookName = bookNameField.getText();
-        Genre genre = (Genre) genreComboBox.getSelectedItem();
+        String genre = (String) genreComboBox.getSelectedItem();
         boolean isTaken = isTakenCheckBox.isSelected();
 
         // Create Author object
         Author author = new Author(authorName, ""); // Set the author name
 
         // Create Book object
-        Book book = new Book(author, genre, null, bookName);
-        book.setTaken(isTaken);
+        Book book = new Book(bookName, authorName, genre, );
+        book.setHasImage(isTaken);
 
         // Notify the listener with the book object
         if (saveButtonListener != null) {
