@@ -1,0 +1,73 @@
+3
+es
+20
+Archivo
+Idioma
+Salir
+Ayuda
+Nuevo
+Eliminar
+Nombre
+Autor
+Género
+Año
+Abrir
+Guardar
+Ayuda
+Para añadir un libro haga click en el botón de Nuevo y rellene toda la informacion del libro.\\nPara eliminar un libro haga click en el libro y luego en el botón de Eliminar.\\nPara editar un libro haga click en el libro y luego en Modificar o haga doble click en él.
+Volver
+Guardar
+Libros
+Aviso
+No se puede Añadir un libro duplicado
+Modificar
+1
+images/covers/portada.jpg
+en
+20
+Archive
+Language
+Exit
+Help
+New
+Delete
+Title
+Author
+Genre
+Year
+Open
+Save
+Help
+To add a book click the New button and complete the information.\\nTo delete a book click the book and then the Delete button.\\nTo edit a book, click on the book and then click Edit or double-click on it.
+Return
+Save
+Books
+Warning
+You cannot add a duplicated book
+Modify
+1
+images/covers/cover.jpg
+pt
+20
+Arquivo
+Idioma
+Saída
+Ajuda
+Novo
+Eliminar
+T�tulo
+Autor
+Género
+Ano
+Aberto
+Guardar
+Ajuda
+Para adicionar um livro clique no botão Novo e preencha a informação.\\nPara eliminar um livro, clique no botão Eliminar.\\nPara editar um livro, clique no livro e depois em Modificar ou clique duas vezes sobre ele.
+Devolver
+Guardar
+Livros
+Aviso
+Não pode adicionar um livro duplicado
+Modificar
+1
+images/covers/cobertura.jpg
