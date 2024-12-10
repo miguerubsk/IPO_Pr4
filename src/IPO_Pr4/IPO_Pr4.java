@@ -73,6 +73,9 @@ public class IPO_Pr4 {
         });
     }
 
+    /**
+     * 
+     */
     private static void cargarIdiomas() {
         try {
             idiomas = new Idiomas("idiomas.txt");
@@ -91,6 +94,9 @@ public class IPO_Pr4 {
         tituloAyuda = idiomas.getIdioma(0).get(21);
     }
 
+    /**
+     * 
+     */
     private static void crearVentana() {
         JFrame frame = new JFrame("Gestor de libros");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -108,6 +114,10 @@ public class IPO_Pr4 {
         frame.setVisible(true);
     }
 
+    /**
+     * 
+     * @param frame 
+     */
     private static void crearMenuBar(JFrame frame) {
         menuBar = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
@@ -222,6 +232,10 @@ public class IPO_Pr4 {
         }
     }
 
+    /**
+     * 
+     * @param cual el idioma al que se quiera cambiar, por orden de aparición en el fichero de idiomas
+     */
     public static void cambiarIdioma(int cual) {
         jMenu1Text = idiomas.getIdioma(cual).get(1);
         jMenu3Text = idiomas.getIdioma(cual).get(2);
@@ -241,6 +255,10 @@ public class IPO_Pr4 {
         menuItemAyuda.setText(jMenuItem5Text);
     }
 
+    /**
+     * 
+     * @param ruta ruta donde se encuentra el archivo con los datos que se quieran cargar
+     */
     public static void cargarDatos(String ruta) {
         inicio.cargarDatos(ruta);
     }

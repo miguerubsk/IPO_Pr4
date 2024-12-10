@@ -31,6 +31,12 @@ public class CargarDatos {
 
     private final ArrayList<Libro> datos;
 
+    /**
+     * 
+     * @param fichero fichero que contiene los datos a cargar
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public CargarDatos(String fichero) throws FileNotFoundException, IOException {
         this.datos = new ArrayList<>();
         File archivo = new File(fichero);
@@ -39,15 +45,16 @@ public class CargarDatos {
             String linea = scn.nextLine();
             String[] split = linea.split("\t");
             String[] aux = new String[5];
-//            for (String string : aux) {
-//                string = " ";
-//            }
             System.arraycopy(split, 0, aux, 0, split.length);
             Libro nuevoLibro = new Libro(aux[0], aux[1], aux[2], aux[3], aux[4]);
             datos.add(nuevoLibro);
         }
     }
 
+    /**
+     * 
+     * @return un ArrayList con los libros que se han cargado
+     */
     public ArrayList<Libro> getDatos() {
         return datos;
     }

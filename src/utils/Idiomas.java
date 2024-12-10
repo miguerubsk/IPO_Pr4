@@ -33,6 +33,12 @@ public class Idiomas {
     private final ArrayList<ArrayList<ImageIcon>> imagenes;
     private final int numIdiomas;
 
+    /**
+     * Lee y carga en memoria el fichero con los diferentes idiomas
+     * @param fichero ruta al fichero que contiene los idiomas
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public Idiomas(String fichero) throws FileNotFoundException, IOException {
         FileReader f = new FileReader(fichero);
         BufferedReader b = new BufferedReader(f);
@@ -59,22 +65,44 @@ public class Idiomas {
         }
     }
 
+    /**
+     * 
+     * @return Una lista de listas con los idiomas
+     */
     public ArrayList<ArrayList<String>> getIdiomas() {
         return idiomas;
     }
 
+    /**
+     * 
+     * @param cual el idioma que se quiera obtener por orden según aparece en el fichero
+     * @return Una lista con los textos del idioma
+     */
     public ArrayList<String> getIdioma(int cual) {
         return idiomas.get(cual);
     }
 
+    /**
+     * 
+     * @return una lista de listas con los diferentes idiomas
+     */
     public ArrayList<ArrayList<ImageIcon>> getImagenes() {
         return imagenes;
     }
 
+    /**
+     * 
+     * @param cual el idioma que se quiera obtener por orden según aparece en el fichero
+     * @return Una lista con las imágenes del idioma
+     */
     public ArrayList<ImageIcon> getImagenesIdioma(int cual) {
         return imagenes.get(cual);
     }
 
+    /**
+     * 
+     * @return el número de idiomas cargados
+     */
     public int getNumIdiomas() {
         return numIdiomas;
     }

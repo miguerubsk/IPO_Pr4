@@ -43,10 +43,10 @@ public final class Nuevo extends javax.swing.JPanel {
     /**
      * Creates new form Edicion
      *
-     * @param panelAnterior
-     * @param libro
-     * @param idioma
-     * @param imagenes
+     * @param panelAnterior panel desde el que se está llamando a la fonción
+     * @param libro que se va a editar
+     * @param idioma idioma seleccionado
+     * @param imagenes imágenes según el idioma
      */
     public Nuevo(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
@@ -66,6 +66,9 @@ public final class Nuevo extends javax.swing.JPanel {
         addImage.addActionListener(new AddImageListener(this));
     }
 
+    /**
+     *
+     */
     public void guardarLibro() {
         libro.setNombre(jTextFieldNombre.getText());
         libro.setAutor(jTextFieldAutor.getText());
@@ -74,6 +77,9 @@ public final class Nuevo extends javax.swing.JPanel {
         panelAnterior.guardarLibro(libro);
     }
 
+    /**
+     *
+     */
     public void cambiarIdioma() {
         jLabelNombre.setText(idioma.get(7));
         jLabelAutor.setText(idioma.get(8));
@@ -82,10 +88,15 @@ public final class Nuevo extends javax.swing.JPanel {
         saveButton.setText(idioma.get(16));
         volverButton.setText(idioma.get(15));
         imagenLibro.setIcon(imagenes.get(0));
+        addImage.setText(idioma.get(27));
         this.revalidate();
         this.repaint();
     }
 
+    /**
+     *
+     * @param ruta relativa
+     */
     public void setImagenLibro(String ruta) {
         libro.setRutaImagen(ruta);
     }
@@ -224,10 +235,12 @@ public final class Nuevo extends javax.swing.JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            panelEdicion.guardarLibro();
-            panelAnterior.getDialogoEmergente().dispose();
-//            panelEdicion.setVisible(false);
-//            panelAnterior.setVisible(true);
+            if (jTextFieldNombre.getText().isBlank() || jTextFieldAutor.getText().isBlank() || jTextFieldGenero.getText().isBlank()) {
+                panelAnterior.mostrarError(26, panelEdicion);
+            } else {
+                panelEdicion.guardarLibro();
+                panelAnterior.getDialogoEmergente().dispose();
+            }
         }
     }
 
@@ -242,8 +255,6 @@ public final class Nuevo extends javax.swing.JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             panelAnterior.getDialogoEmergente().dispose();
-//            panelEdicion.setVisible(false);
-//            panelAnterior.setVisible(true);
         }
     }
 
@@ -266,12 +277,12 @@ public final class Nuevo extends javax.swing.JPanel {
 
             if (resultado == JFileChooser.APPROVE_OPTION) {
                 File archivo = selectorArchivos.getSelectedFile();
-                
+
                 String directorioBase = System.getProperty("user.dir");
                 Path rutaAbsoluta = Paths.get(archivo.getAbsolutePath());
                 Path rutaBase = Paths.get(directorioBase);
                 Path rutaRelativa = rutaBase.relativize(rutaAbsoluta);
-                
+
                 System.out.println("Fichero cargado: " + rutaRelativa.toString());
                 cargarImagen(rutaRelativa.toString());
 
@@ -279,8 +290,12 @@ public final class Nuevo extends javax.swing.JPanel {
             }
         }
 
+        /**
+         *
+         * @param ruta
+         */
         private void cargarImagen(String ruta) {
-            ImageIcon imageIcon = new ImageIcon(new ImageIcon(ruta).getImage().getScaledInstance(82, 125, Image.SCALE_DEFAULT));
+            ImageIcon imageIcon = new ImageIcon(new ImageIcon(ruta).getImage().getScaledInstance(82, 125, Image.SCALE_SMOOTH));
             nuevo.imagenLibro.setIcon(imageIcon);
             nuevo.setImagenLibro(ruta);
         }

@@ -19,13 +19,14 @@ package interfaces;
 import IPO_Pr4.Libro;
 import utils.GuardarDatos;
 import utils.CargarDatos;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +39,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 /**
@@ -94,13 +96,12 @@ public final class Inicio extends javax.swing.JPanel {
         addButton.setIcon(addIcon);
         deleteButton.setIcon(deleteIcon);
         modifyButton.setIcon(modifyIcon);
-        dialogoEmergente = new JDialog(framePadre, null, true);
-        dialogoEmergente.setSize(new Dimension(500, 400));
-        dialogoEmergente.setLocationRelativeTo(framePadre);
-        dialogoEmergente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
+    /**
+     *
+     */
     private void addLibrosInicio() {
         try {
             cd = new CargarDatos("libros.tsv");
@@ -113,52 +114,105 @@ public final class Inicio extends javax.swing.JPanel {
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         });
     }
+    
+    public void mostrarError(int texto, JPanel padre){
+        JOptionPane optionPane = new JOptionPane(
+                    idioma.get(texto),
+                    JOptionPane.ERROR_MESSAGE,
+                    JOptionPane.DEFAULT_OPTION,
+                    null,
+                    new Object[]{},
+                    null
+            );
+            JDialog dialogo = optionPane.createDialog(padre, idioma.get(18));
+            JButton botonAceptar = new JButton(idioma.get(3));
+            botonAceptar.addActionListener(e2 -> dialogo.dispose());
+            optionPane.setOptions(new Object[]{botonAceptar});
+            dialogo.setVisible(true);
+    }
 
+    /**
+     *
+     * @param inicio panel de inicio
+     */
+    private void gestionarEdicion(JPanel inicio) {
+        int elementoSeleccionado = list.getSelectedIndex();
+        if (elementoSeleccionado < 0) {
+            mostrarError(28, inicio);
+        } else {
+            list.setSelectedIndex(elementoSeleccionado);
+            list.ensureIndexIsVisible(elementoSeleccionado);
+
+            edicion = new Edicion((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
+            libroAnterior = vectorLibros.get(elementoSeleccionado);
+            vectorLibros.remove(elementoSeleccionado);
+            listModel.remove(elementoSeleccionado);
+
+            dialogoEmergente = new JDialog(framePadre, idioma.get(20), true);
+            dialogoEmergente.setSize(new Dimension(500, 400));
+            dialogoEmergente.setLocationRelativeTo(framePadre);
+            dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+            dialogoEmergente.add(edicion);
+
+            dialogoEmergente.setVisible(true);
+
+            dialogoEmergente.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    restaurarLibro();
+                    dialogoEmergente.dispose();
+                }
+            });
+        }
+    }
+
+    /**
+     *
+     * @param libro que se va a guardar
+     */
     public void guardarLibro(Libro libro) {
         if (vectorLibros.contains(libro)) {
-            //JOptionPane.showMessageDialog(framePadre, idioma.get(19), idioma.get(18), JOptionPane.ERROR_MESSAGE);
-            JOptionPane optionPane = new JOptionPane(
-                    idioma.get(19), // Mensaje a mostrar
-                    JOptionPane.ERROR_MESSAGE, // Tipo de mensaje
-                    JOptionPane.DEFAULT_OPTION, // Tipo de opciones
-                    null, // Ícono personalizado (null para predeterminado)
-                    new Object[]{}, // Sin botones predeterminados
-                    null // Valor predeterminado (null)
-            );
-            JDialog dialogo = optionPane.createDialog(framePadre, idioma.get(18));
-            JButton botonAceptar = new JButton(idioma.get(3));
-            botonAceptar.addActionListener(e -> dialogo.dispose()); // Cerrar el diálogo al pulsar
-            optionPane.setOptions(new Object[]{botonAceptar});
-
-            // Mostrar el diálogo
-            dialogo.setVisible(true);
+            mostrarError(19, this);
         } else {
             vectorLibros.add(libro);
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         }
     }
 
+    /**
+     *
+     */
     public void restaurarLibro() {
         vectorLibros.add(libroAnterior);
         listModel.addElement(libroAnterior.getNombre() + separador + libroAnterior.getAutor() + separador + libroAnterior.getGenero());
     }
 
+    /**
+     *
+     */
     public void cambiarIdioma() {
         addButton.setText(idioma.get(5));
         deleteButton.setText(idioma.get(6));
         modifyButton.setText(idioma.get(20));
         jLabelLibros.setText(idioma.get(17));
         imagenLang.setIcon(new ImageIcon(new ImageIcon("images/" + idioma.getFirst() + ".png").getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
-        //Locale.setDefault(new Locale(idioma.getFirst(), idioma.getFirst().toUpperCase()));
-
     }
 
+    /**
+     *
+     * @param idioma lista con los textos del idioma al que se quiere cambiar
+     * @param imagenes lista con las imágenes del idioma al que se quiere cambiar
+     */
     public void setIdioma(ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         this.idioma = idioma;
         this.imagenes = imagenes;
         cambiarIdioma();
     }
 
+    /**
+     *
+     * @param ruta relativa al archivo con los datos
+     */
     public void cargarDatos(String ruta) {
 
         try {
@@ -178,10 +232,17 @@ public final class Inicio extends javax.swing.JPanel {
 
     }
 
+    /**
+     *
+     */
     public void guardarDatos() {
         GuardarDatos gd = new GuardarDatos(vectorLibros, "libros");
     }
 
+    /**
+     *
+     * @return un dialogo emergente sin inicializar
+     */
     public JDialog getDialogoEmergente() {
         return dialogoEmergente;
     }
@@ -197,20 +258,22 @@ public final class Inicio extends javax.swing.JPanel {
         @Override
         public void mouseClicked(MouseEvent evt) {
             if (evt.getClickCount() == 2) {
-                int elementoSeleccionado = list.getSelectedIndex();
-                list.setSelectedIndex(elementoSeleccionado);
-                list.ensureIndexIsVisible(elementoSeleccionado);
-
-                edicion = new Edicion(inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
-                libroAnterior = vectorLibros.get(elementoSeleccionado);
-                vectorLibros.remove(elementoSeleccionado);
-                listModel.remove(elementoSeleccionado);
-
-                dialogoEmergente.setTitle(idioma.get(20));
-                dialogoEmergente.add(edicion);
-
-                dialogoEmergente.setVisible(true);
+                gestionarEdicion(inicio);
             }
+        }
+    }
+
+    class ModificarListener implements ActionListener {
+
+        Inicio inicio;
+
+        public ModificarListener(Inicio JPanel) {
+            this.inicio = JPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            gestionarEdicion(inicio);
         }
     }
 
@@ -227,19 +290,13 @@ public final class Inicio extends javax.swing.JPanel {
             Libro libro = new Libro();
             nuevo = new Nuevo(inicio, libro, idioma, imagenes);
 
-            dialogoEmergente.setTitle(idioma.get(5));
+            dialogoEmergente = new JDialog(framePadre, idioma.get(5), true);
+            dialogoEmergente.setSize(new Dimension(500, 400));
+            dialogoEmergente.setLocationRelativeTo(framePadre);
+            dialogoEmergente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialogoEmergente.add(nuevo);
 
             dialogoEmergente.setVisible(true);
-//            inicio.setVisible(false);
-
-//            Libro libro = new Libro();
-//            nuevo = new Nuevo(inicio, libro, idioma, imagenes);
-//
-//            framePadre.add(nuevo, BorderLayout.PAGE_START);
-//            framePadre.pack();
-//            nuevo.setVisible(true);
-//            inicio.setVisible(false);
         }
     }
 
@@ -268,38 +325,6 @@ public final class Inicio extends javax.swing.JPanel {
                 default -> {
                 }
             }
-
-        }
-    }
-
-    class ModificarListener implements ActionListener {
-
-        Inicio inicio;
-
-        public ModificarListener(Inicio JPanel) {
-            this.inicio = JPanel;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int elementoSeleccionado = list.getSelectedIndex();
-            list.setSelectedIndex(elementoSeleccionado);
-            list.ensureIndexIsVisible(elementoSeleccionado);
-
-            edicion = new Edicion(inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
-            libroAnterior = vectorLibros.get(elementoSeleccionado);
-            vectorLibros.remove(elementoSeleccionado);
-            listModel.remove(elementoSeleccionado);
-
-            dialogoEmergente.setTitle(idioma.get(20));
-            dialogoEmergente.add(edicion);
-
-            dialogoEmergente.setVisible(true);
-
-//            framePadre.add(edicion, BorderLayout.PAGE_START);
-//            framePadre.pack();
-//            edicion.setVisible(true);
-//            inicio.setVisible(false);
         }
     }
 

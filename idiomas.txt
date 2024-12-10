@@ -1,6 +1,6 @@
 2
 es
-25
+28
 Archivo
 Idioma
 Salir
@@ -26,10 +26,13 @@ Información
 Confirmación
 Sí
 No
+Los campos "Nombre", "Autor" y "Género" son obligatorios.
+Añadir imagen
+Debe seleccionar un libro
 1
 images/covers/portada.jpg
 en
-25
+28
 Archive
 Language
 Exit
@@ -55,5 +58,8 @@ Are you sure you want to delete the book?
 Confirmation
 Yes
 No
+The fields "Name", "Author" and "Genre" are required.
+Add image
+You must select a book
 1
 images/covers/cover.jpg

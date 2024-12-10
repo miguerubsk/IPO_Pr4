@@ -23,6 +23,7 @@ import java.util.Objects;
  * @author Miguel González García
  */
 public class Libro {
+
     private String nombre;
     private String autor;
     private String genero;
@@ -30,6 +31,14 @@ public class Libro {
     private String rutaImagen;
     private boolean tieneImagen;
 
+    /**
+     *
+     * @param nombre
+     * @param autor
+     * @param genero
+     * @param año
+     * @param rutaImagen
+     */
     public Libro(String nombre, String autor, String genero, String año, String rutaImagen) {
         this.nombre = nombre;
         this.autor = autor;
@@ -39,6 +48,9 @@ public class Libro {
         this.tieneImagen = true;
     }
 
+    /**
+     *
+     */
     public Libro() {
         this.nombre = " ";
         this.autor = " ";
@@ -47,48 +59,92 @@ public class Libro {
         this.tieneImagen = false;
     }
 
+    /**
+     *
+     * @param nombre
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     *
+     * @param autor
+     */
     public void setAutor(String autor) {
         this.autor = autor;
     }
 
+    /**
+     *
+     * @param genero
+     */
     public void setGenero(String genero) {
         this.genero = genero;
     }
 
+    /**
+     *
+     * @param año
+     */
     public void setAño(String año) {
         this.año = año;
     }
 
+    /**
+     *
+     * @return el nombre del libro
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     *
+     * @return el autor del libro
+     */
     public String getAutor() {
         return autor;
     }
 
+    /**
+     *
+     * @return el género del libro
+     */
     public String getGenero() {
         return genero;
     }
 
+    /**
+     *
+     * @return el año de publicación del libro
+     */
     public String getAño() {
         return año;
     }
 
+    /**
+     *
+     * @param rutaImagen la ruta relativa de la imagen
+     */
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
         this.tieneImagen = true;
     }
 
+    /**
+     *
+     * @return la ruta relativa de la imagen
+     */
     public String getRutaImagen() {
         return rutaImagen;
     }
 
-    public boolean isTieneImagen() {
+    /**
+     *
+     * @return true si tiene imagen false en caso contratrio
+     */
+    public boolean tieneImagen() {
         return tieneImagen;
     }
 
@@ -116,8 +172,4 @@ public class Libro {
         final Libro other = (Libro) obj;
         return Objects.equals(this.nombre, other.nombre);
     }
-
-    
-    
-    
 }

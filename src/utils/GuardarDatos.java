@@ -32,6 +32,11 @@ public class GuardarDatos {
     private FileWriter fichero = null;
     private PrintWriter pw = null;
 
+    /**
+     * 
+     * @param libros ArrayList que contiene los libros a guardar
+     * @param nombreArchivo nombre del archivo donde se quieran guardar los libros
+     */
     public GuardarDatos(ArrayList<Libro> libros, String nombreArchivo) {
         try {
             File file = new File(nombreArchivo + ".tsv");
