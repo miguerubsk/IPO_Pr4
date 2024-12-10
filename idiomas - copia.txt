@@ -1,0 +1,97 @@
+3
+es
+28
+Archivo
+Idioma
+Salir
+Ayuda
+Nuevo
+Eliminar
+Nombre
+Autor
+GÃ©nero
+AÃ±o
+Abrir
+Guardar
+Ayuda
+Para aÃ±adir un libro haga click en el botÃ³n de Nuevo y rellene toda la informacion del libro.\\nPara eliminar un libro haga click en el libro y luego en el botÃ³n de Eliminar.\\nPara editar un libro haga click en el libro y luego en Modificar o haga doble click en Ã©l.
+Volver
+Guardar
+Libros
+Aviso
+No se puede AÃ±adir un libro duplicado
+Editar
+InformaciÃ³n
+Â¿EstÃ¡ seguro de querer borrar el libro?
+ConfirmaciÃ³n
+SÃ­
+No
+Los campos "Nombre", "Autor" y "GÃ©nero" son obligatorios.
+AÃ±adir imagen
+Debe seleccionar un libro
+1
+images/covers/portada.jpg
+en
+28
+Archive
+Language
+Exit
+Help
+New
+Delete
+Title
+Author
+Genre
+Year
+Open
+Save
+Help
+To add a book click the New button and complete the information.\\nTo delete a book click the book and then the Delete button.\\nTo edit a book, click on the book and then click Edit or double-click on it.
+Return
+Save
+Books
+Warning
+You cannot add a duplicated book
+Edit
+Information
+Are you sure you want to delete the book?
+Confirmation
+Yes
+No
+The fields "Name", "Author" and "Genre" are required.
+Add image
+You must select a book
+1
+images/covers/cover.jpg
+pt
+28
+Arquivo
+Idioma
+SaÃ­da
+Ajuda
+Novo
+Eliminar
+TÃ­tulo
+Autor
+GÃ©nero
+Ano
+Aberto
+Guardar
+Ajuda
+Para adicionar um livro clique no botÃ£o Novo e preencha a informaÃ§Ã£o.\\nPara eliminar um livro, clique no botÃ£o Eliminar.\\nPara editar um livro, clique no livro e depois em Modificar ou clique duas vezes sobre ele.
+Devolver
+Guardar
+Livros
+Aviso
+NÃ£o pode adicionar um livro duplicado
+Editar
+informaÃ§Ã£o
+Tem a certeza de que pretende eliminar o livro?
+ConfirmaÃ§Ã£o
+Sim
+NÃ£o
+Os campos â€œNomeâ€, â€œAutorâ€ e â€œGÃ©neroâ€ sÃ£o de preenchimento obrigatÃ³rio.
+Adicionar imagen
+Deve selecionar um livro
+1
+images/covers/cobertura.jpg
