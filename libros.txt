@@ -1,5 +1,0 @@
-La Biblia;Varios;Religioso;-2000;images/covers/biblia.jpg;
-El problema de los tres cuerpos;Cixin Liu;Ciencia Ficción;2016;images/covers/3cuerpos.jpg;
-El bosque oscuro;Cixin Liu;Ciencia Ficción;2018;images/covers/bosqueoscuro.jpg;
-El fin de la muerte;Cixin Liu;Ciencia Ficción;2018;images/covers/finmuerte.jpg;
-El niño con el pijama de rayas;John Boyne;Drama;2007;images/covers/pijamarayas.jpg;

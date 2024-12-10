@@ -94,13 +94,11 @@ public class Libro {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.nombre);
-        hash = 71 * hash + Objects.hashCode(this.autor);
-        hash = 71 * hash + Objects.hashCode(this.genero);
-        hash = 71 * hash + Objects.hashCode(this.año);
-        hash = 71 * hash + Objects.hashCode(this.rutaImagen);
-        hash = 71 * hash + (this.tieneImagen ? 1 : 0);
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.nombre);
+        hash = 29 * hash + Objects.hashCode(this.autor);
+        hash = 29 * hash + Objects.hashCode(this.genero);
+        hash = 29 * hash + Objects.hashCode(this.año);
         return hash;
     }
 
@@ -116,17 +114,9 @@ public class Libro {
             return false;
         }
         final Libro other = (Libro) obj;
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.autor, other.autor)) {
-            return false;
-        }
-        if (!Objects.equals(this.genero, other.genero)) {
-            return false;
-        }
-        return Objects.equals(this.año, other.año);
+        return Objects.equals(this.nombre, other.nombre);
     }
+
     
     
     

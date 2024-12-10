@@ -20,8 +20,8 @@ import IPO_Pr4.Libro;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Vector;
 
 /**
  *
@@ -29,15 +29,15 @@ import java.util.Vector;
  */
 public class CargarDatos {
 
-    private final Vector<Libro> datos;
+    private final ArrayList<Libro> datos;
 
     public CargarDatos(String fichero) throws FileNotFoundException, IOException {
-        this.datos = new Vector<>();
+        this.datos = new ArrayList<>();
         File archivo = new File(fichero);
         Scanner scn = new Scanner(archivo);
         while (scn.hasNext()) {
             String linea = scn.nextLine();
-            String[] split = linea.split(";");
+            String[] split = linea.split("\t");
             String[] aux = new String[5];
 //            for (String string : aux) {
 //                string = " ";
@@ -48,7 +48,7 @@ public class CargarDatos {
         }
     }
 
-    public Vector<Libro> getDatos() {
+    public ArrayList<Libro> getDatos() {
         return datos;
     }
 

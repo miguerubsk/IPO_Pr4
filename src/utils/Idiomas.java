@@ -20,7 +20,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 /**
@@ -29,8 +29,8 @@ import javax.swing.ImageIcon;
  */
 public class Idiomas {
 
-    private final Vector<Vector<String>> idiomas;
-    private final Vector<Vector<ImageIcon>> imagenes;
+    private final ArrayList<ArrayList<String>> idiomas;
+    private final ArrayList<ArrayList<ImageIcon>> imagenes;
     private final int numIdiomas;
 
     public Idiomas(String fichero) throws FileNotFoundException, IOException {
@@ -38,17 +38,17 @@ public class Idiomas {
         BufferedReader b = new BufferedReader(f);
 
         numIdiomas = Integer.parseInt(b.readLine());
-        idiomas = new Vector<>();
-        imagenes = new Vector<>();
+        idiomas = new ArrayList<>();
+        imagenes = new ArrayList<>();
         for (int i = 0; i < numIdiomas; i++) {
-            Vector<String> idioma = new Vector<>();
+            ArrayList<String> idioma = new ArrayList<>();
             idioma.add(b.readLine());
             int numPalabras = Integer.parseInt(b.readLine());
             for (int j = 0; j < numPalabras; j++) {
                 idioma.add(b.readLine());
             }
 
-            Vector<ImageIcon> imagenesAux = new Vector<>();
+            ArrayList<ImageIcon> imagenesAux = new ArrayList<>();
             int numImagenes = Integer.parseInt(b.readLine());
             for (int j = 0; j < numImagenes; j++) {
                 imagenesAux.add(new ImageIcon(b.readLine()));
@@ -59,19 +59,19 @@ public class Idiomas {
         }
     }
 
-    public Vector<Vector<String>> getIdiomas() {
+    public ArrayList<ArrayList<String>> getIdiomas() {
         return idiomas;
     }
 
-    public Vector<String> getIdioma(int cual) {
+    public ArrayList<String> getIdioma(int cual) {
         return idiomas.get(cual);
     }
 
-    public Vector<Vector<ImageIcon>> getImagenes() {
+    public ArrayList<ArrayList<ImageIcon>> getImagenes() {
         return imagenes;
     }
 
-    public Vector<ImageIcon> getImagenesIdioma(int cual) {
+    public ArrayList<ImageIcon> getImagenesIdioma(int cual) {
         return imagenes.get(cual);
     }
 

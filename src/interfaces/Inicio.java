@@ -21,18 +21,21 @@ import utils.GuardarDatos;
 import utils.CargarDatos;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -47,14 +50,16 @@ public final class Inicio extends javax.swing.JPanel {
     private Nuevo nuevo;
     private Edicion edicion;
     private CargarDatos cd;
+    private final String separador = " | ";
+    private JDialog dialogoEmergente;
 
     private final DefaultListModel listModel;
 
-    Vector<String> idioma;
+    ArrayList<String> idioma;
 
-    private final Vector<Libro> vectorLibros;
+    private final ArrayList<Libro> vectorLibros;
     private Libro libroAnterior;
-    private Vector<ImageIcon> imagenes;
+    private ArrayList<ImageIcon> imagenes;
 
     /**
      * Creates new form Inicio
@@ -63,17 +68,17 @@ public final class Inicio extends javax.swing.JPanel {
      * @param idioma vector con el idioma
      * @param imagenes vector con las imágenes
      */
-    public Inicio(JFrame framePadre, Vector<String> idioma, Vector<ImageIcon> imagenes) {
+    public Inicio(JFrame framePadre, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
 
         this.framePadre = framePadre;
-        this.vectorLibros = new Vector<>();
+        this.vectorLibros = new ArrayList<>();
         this.idioma = idioma;
         this.imagenes = imagenes;
         cambiarIdioma();
 
         this.listModel = new DefaultListModel();
-        addLibrosEjemplo();
+        addLibrosInicio();
         list.setModel(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
@@ -83,41 +88,59 @@ public final class Inicio extends javax.swing.JPanel {
         addButton.addActionListener(new NuevoListener(this));
         deleteButton.addActionListener(new EliminarListener(this));
         modifyButton.addActionListener(new ModificarListener(this));
-        Icon addIcon = new ImageIcon("images/icons/add.png");
-        Icon deleteIcon = new ImageIcon("images/icons/delete.png");
-        Icon modifyIcon = new ImageIcon("images/icons/edit.png");
+        Icon addIcon = new ImageIcon(new ImageIcon("images/icons/add.png").getImage().getScaledInstance(16, 16, Image.SCALE_DEFAULT));
+        Icon deleteIcon = new ImageIcon(new ImageIcon("images/icons/delete.png").getImage().getScaledInstance(16, 16, Image.SCALE_DEFAULT));
+        Icon modifyIcon = new ImageIcon(new ImageIcon("images/icons/edit.png").getImage().getScaledInstance(16, 16, Image.SCALE_DEFAULT));
         addButton.setIcon(addIcon);
         deleteButton.setIcon(deleteIcon);
         modifyButton.setIcon(modifyIcon);
-
+        dialogoEmergente = new JDialog(framePadre, null, true);
+        dialogoEmergente.setSize(new Dimension(500, 400));
+        dialogoEmergente.setLocationRelativeTo(framePadre);
+        dialogoEmergente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
-    private void addLibrosEjemplo() {
+    private void addLibrosInicio() {
         try {
-            cd = new CargarDatos("libros.txt");
+            cd = new CargarDatos("libros.tsv");
             vectorLibros.addAll(cd.getDatos());
         } catch (IOException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        for (Libro libro : vectorLibros) {
-            listModel.addElement(libro.getNombre() + " | " + libro.getAutor());
-        }
+        vectorLibros.forEach((var libro) -> {
+            listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
+        });
     }
 
     public void guardarLibro(Libro libro) {
         if (vectorLibros.contains(libro)) {
-            JOptionPane.showMessageDialog(framePadre, idioma.get(19), idioma.get(18), JOptionPane.WARNING_MESSAGE);
+            //JOptionPane.showMessageDialog(framePadre, idioma.get(19), idioma.get(18), JOptionPane.ERROR_MESSAGE);
+            JOptionPane optionPane = new JOptionPane(
+                    idioma.get(19), // Mensaje a mostrar
+                    JOptionPane.ERROR_MESSAGE, // Tipo de mensaje
+                    JOptionPane.DEFAULT_OPTION, // Tipo de opciones
+                    null, // Ícono personalizado (null para predeterminado)
+                    new Object[]{}, // Sin botones predeterminados
+                    null // Valor predeterminado (null)
+            );
+            JDialog dialogo = optionPane.createDialog(framePadre, idioma.get(18));
+            JButton botonAceptar = new JButton(idioma.get(3));
+            botonAceptar.addActionListener(e -> dialogo.dispose()); // Cerrar el diálogo al pulsar
+            optionPane.setOptions(new Object[]{botonAceptar});
+
+            // Mostrar el diálogo
+            dialogo.setVisible(true);
         } else {
             vectorLibros.add(libro);
-            listModel.addElement(libro.getNombre() + " | " + libro.getAutor());
+            listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         }
     }
 
     public void restaurarLibro() {
         vectorLibros.add(libroAnterior);
-        listModel.addElement(libroAnterior.getNombre() + " | " + libroAnterior.getAutor());
+        listModel.addElement(libroAnterior.getNombre() + separador + libroAnterior.getAutor() + separador + libroAnterior.getGenero());
     }
 
     public void cambiarIdioma() {
@@ -125,9 +148,12 @@ public final class Inicio extends javax.swing.JPanel {
         deleteButton.setText(idioma.get(6));
         modifyButton.setText(idioma.get(20));
         jLabelLibros.setText(idioma.get(17));
+        imagenLang.setIcon(new ImageIcon(new ImageIcon("images/" + idioma.getFirst() + ".png").getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
+        //Locale.setDefault(new Locale(idioma.getFirst(), idioma.getFirst().toUpperCase()));
+
     }
 
-    public void setIdioma(Vector<String> idioma, Vector<ImageIcon> imagenes) {
+    public void setIdioma(ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         this.idioma = idioma;
         this.imagenes = imagenes;
         cambiarIdioma();
@@ -137,25 +163,27 @@ public final class Inicio extends javax.swing.JPanel {
 
         try {
             CargarDatos cargaDatos = new CargarDatos(ruta);
-            for (Libro dato : cargaDatos.getDatos()) {
-                if (!vectorLibros.contains(dato)) {
-                    vectorLibros.add(dato);
-                }
-            }
+            cargaDatos.getDatos().stream().filter(dato -> (!vectorLibros.contains(dato))).forEachOrdered(dato -> {
+                vectorLibros.add(dato);
+            });
         } catch (IOException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Collections.sort(vectorLibros, (Libro p1, Libro p2) -> p1.getAutor().compareTo(p2.getAutor()));
-        
-        for (Libro libro : vectorLibros) {
-            listModel.addElement(libro.getNombre() + " | " + libro.getAutor());
-        }
+
+        vectorLibros.forEach(libro -> {
+            listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
+        });
 
     }
 
     public void guardarDatos() {
         GuardarDatos gd = new GuardarDatos(vectorLibros, "libros");
+    }
+
+    public JDialog getDialogoEmergente() {
+        return dialogoEmergente;
     }
 
     class MouseListener extends MouseAdapter {
@@ -178,10 +206,10 @@ public final class Inicio extends javax.swing.JPanel {
                 vectorLibros.remove(elementoSeleccionado);
                 listModel.remove(elementoSeleccionado);
 
-                framePadre.add(edicion, BorderLayout.PAGE_START);
-                framePadre.pack();
-                edicion.setVisible(true);
-                inicio.setVisible(false);
+                dialogoEmergente.setTitle(idioma.get(20));
+                dialogoEmergente.add(edicion);
+
+                dialogoEmergente.setVisible(true);
             }
         }
     }
@@ -199,10 +227,19 @@ public final class Inicio extends javax.swing.JPanel {
             Libro libro = new Libro();
             nuevo = new Nuevo(inicio, libro, idioma, imagenes);
 
-            framePadre.add(nuevo, BorderLayout.PAGE_START);
-            framePadre.pack();
-            nuevo.setVisible(true);
-            inicio.setVisible(false);
+            dialogoEmergente.setTitle(idioma.get(5));
+            dialogoEmergente.add(nuevo);
+
+            dialogoEmergente.setVisible(true);
+//            inicio.setVisible(false);
+
+//            Libro libro = new Libro();
+//            nuevo = new Nuevo(inicio, libro, idioma, imagenes);
+//
+//            framePadre.add(nuevo, BorderLayout.PAGE_START);
+//            framePadre.pack();
+//            nuevo.setVisible(true);
+//            inicio.setVisible(false);
         }
     }
 
@@ -220,8 +257,18 @@ public final class Inicio extends javax.swing.JPanel {
             list.setSelectedIndex(elementoSeleccionado);
             list.ensureIndexIsVisible(elementoSeleccionado);
 
-            listModel.removeElementAt(elementoSeleccionado);
-            vectorLibros.removeElementAt(elementoSeleccionado);
+            Object[] opciones = {idioma.get(24), idioma.get(25)};
+            int confirm = JOptionPane.showOptionDialog(inicio, idioma.get(22), idioma.get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+            switch (confirm) {
+                case JOptionPane.YES_OPTION -> {
+                    listModel.removeElementAt(elementoSeleccionado);
+                    vectorLibros.remove(elementoSeleccionado);
+                }
+                default -> {
+                }
+            }
+
         }
     }
 
@@ -244,10 +291,15 @@ public final class Inicio extends javax.swing.JPanel {
             vectorLibros.remove(elementoSeleccionado);
             listModel.remove(elementoSeleccionado);
 
-            framePadre.add(edicion, BorderLayout.PAGE_START);
-            framePadre.pack();
-            edicion.setVisible(true);
-            inicio.setVisible(false);
+            dialogoEmergente.setTitle(idioma.get(20));
+            dialogoEmergente.add(edicion);
+
+            dialogoEmergente.setVisible(true);
+
+//            framePadre.add(edicion, BorderLayout.PAGE_START);
+//            framePadre.pack();
+//            edicion.setVisible(true);
+//            inicio.setVisible(false);
         }
     }
 
@@ -267,6 +319,7 @@ public final class Inicio extends javax.swing.JPanel {
         jLabelLibros = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         modifyButton = new javax.swing.JButton();
+        imagenLang = new javax.swing.JLabel();
 
         list.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         list.setModel(new javax.swing.AbstractListModel<String>() {
@@ -315,19 +368,23 @@ public final class Inicio extends javax.swing.JPanel {
                         .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 64, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 14, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabelLibros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
-                    .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(modifyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabelLibros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSeparator1)
+                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(modifyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                 .addContainerGap())
@@ -342,6 +399,7 @@ public final class Inicio extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JLabel imagenLang;
     private javax.swing.JLabel jLabelLibros;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;

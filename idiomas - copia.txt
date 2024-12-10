@@ -1,4 +1,4 @@
-2
+3
 es
 25
 Archivo
@@ -57,3 +57,32 @@ Yes
 No
 1
 images/covers/cover.jpg
+pt
+25
+Arquivo
+Idioma
+Saída
+Ajuda
+Novo
+Eliminar
+Título
+Autor
+Género
+Ano
+Aberto
+Guardar
+Ajuda
+Para adicionar um livro clique no botão Novo e preencha a informação.\\nPara eliminar um livro, clique no botão Eliminar.\\nPara editar um livro, clique no livro e depois em Modificar ou clique duas vezes sobre ele.
+Devolver
+Guardar
+Livros
+Aviso
+Não pode adicionar um livro duplicado
+Editar
+informação
+Tem a certeza de que pretende eliminar o livro?
+Confirmação
+Sim
+Não
+1
+images/covers/cobertura.jpg

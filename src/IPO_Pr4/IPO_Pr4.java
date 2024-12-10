@@ -20,6 +20,7 @@ import utils.Idiomas;
 import interfaces.Inicio;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -47,6 +48,7 @@ public class IPO_Pr4 {
     private static String jMenuItem4Text;
     private static String jMenuItem5Text;
     private static String textoAyuda;
+    private static String tituloAyuda;
 
     static private Idiomas idiomas;
 
@@ -65,11 +67,9 @@ public class IPO_Pr4 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                cargarIdiomas();
-                crearVentana();
-            }
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            cargarIdiomas();
+            crearVentana();
         });
     }
 
@@ -88,6 +88,7 @@ public class IPO_Pr4 {
         jMenuItem4Text = idiomas.getIdioma(0).get(12);
         jMenuItem5Text = idiomas.getIdioma(0).get(13);
         textoAyuda = idiomas.getIdioma(0).get(14);
+        tituloAyuda = idiomas.getIdioma(0).get(21);
     }
 
     private static void crearVentana() {
@@ -120,10 +121,10 @@ public class IPO_Pr4 {
         menuItemIdioma = new javax.swing.JMenu();
         menuItemIdioma.setText(jMenu3Text); //Idioma
         for (int i = 0; i < idiomas.getNumIdiomas(); i++) {
-            JMenuItem menuItemAux = new JMenuItem(idiomas.getIdioma(i).firstElement());
+            JMenuItem menuItemAux = new JMenuItem(idiomas.getIdioma(i).getFirst());
             menuItemAux.addActionListener(new IdiomaListener(i));
             menuItemIdioma.add(menuItemAux);
-            menuItemAux.setIcon(new ImageIcon("images/" + idiomas.getIdioma(i).firstElement() + ".png"));
+            menuItemAux.setIcon(new ImageIcon(new ImageIcon("images/" + idiomas.getIdioma(i).getFirst() + ".png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         }
         menuItemSalir = new javax.swing.JMenuItem();
         menuItemSalir.setText(jMenuItem2Text);//Salir
@@ -145,12 +146,13 @@ public class IPO_Pr4 {
 
     static class IdiomaListener implements ActionListener {
 
-        private int idioma;
+        private final int idioma;
 
         public IdiomaListener(int idioma) {
             this.idioma = idioma;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             inicio.setIdioma(idiomas.getIdioma(idioma), idiomas.getImagenesIdioma(idioma));
             cambiarIdioma(idioma);
@@ -159,12 +161,13 @@ public class IPO_Pr4 {
 
     static class AbrirListener implements ActionListener {
 
-        private JFrame frame;
+        private final JFrame frame;
 
         public AbrirListener(JFrame frame) {
             this.frame = frame;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             JFileChooser selectorArchivos = new JFileChooser();
             selectorArchivos.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -183,12 +186,13 @@ public class IPO_Pr4 {
 
     static class GuardarListener implements ActionListener {
 
-        private JFrame frame;
+        private final JFrame frame;
 
         public GuardarListener(JFrame frame) {
             this.frame = frame;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             inicio.guardarDatos();
         }
@@ -196,21 +200,23 @@ public class IPO_Pr4 {
 
     static class AyudaListener implements ActionListener {
 
-        private JFrame framePadre;
+        private final JFrame framePadre;
 
         public AyudaListener(JFrame frame) {
             this.framePadre = frame;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             textoAyuda = textoAyuda.replace("\\n", "\n");
             textoAyuda = textoAyuda.replace("\\", "");
-            JOptionPane.showMessageDialog(framePadre, textoAyuda);
+            JOptionPane.showMessageDialog(framePadre, textoAyuda, tituloAyuda, JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
     static private class CloseListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }

@@ -21,7 +21,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Vector;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -35,8 +37,8 @@ public final class Edicion extends javax.swing.JPanel {
     private final Inicio panelAnterior;
     private final Libro libro;
 
-    private final Vector<String> idioma;
-    private Vector<ImageIcon> imagenes;
+    private final ArrayList<String> idioma;
+    private final ArrayList<ImageIcon> imagenes;
 
     /**
      * Creates new form Edicion
@@ -46,7 +48,7 @@ public final class Edicion extends javax.swing.JPanel {
      * @param idioma
      * @param imagenes
      */
-    public Edicion(Inicio panelAnterior, Libro libro, Vector<String> idioma, Vector<ImageIcon> imagenes) {
+    public Edicion(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
         this.panelAnterior = panelAnterior;
         this.libro = libro;
@@ -86,6 +88,8 @@ public final class Edicion extends javax.swing.JPanel {
         jLabelAnio.setText(idioma.get(10));
         saveButton.setText(idioma.get(16));
         volverButton.setText(idioma.get(15));
+        this.revalidate();
+        this.repaint();
     }
 
     public void setImagenLibro(String ruta) {
@@ -226,8 +230,9 @@ public final class Edicion extends javax.swing.JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             panelEdicion.guardarLibro();
-            panelEdicion.setVisible(false);
-            panelAnterior.setVisible(true);
+            panelAnterior.getDialogoEmergente().dispose();
+//            panelEdicion.setVisible(false);
+//            panelAnterior.setVisible(true);
         }
     }
 
@@ -242,8 +247,9 @@ public final class Edicion extends javax.swing.JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             panelAnterior.restaurarLibro();
-            panelEdicion.setVisible(false);
-            panelAnterior.setVisible(true);
+            panelAnterior.getDialogoEmergente().dispose();
+//            panelEdicion.setVisible(false);
+//            panelAnterior.setVisible(true);
         }
     }
 
@@ -266,8 +272,14 @@ public final class Edicion extends javax.swing.JPanel {
 
             if (resultado == JFileChooser.APPROVE_OPTION) {
                 File archivo = selectorArchivos.getSelectedFile();
-                System.out.println("Fichero cargado: " + archivo.getAbsolutePath());
-                cargarImagen(archivo.getAbsolutePath());
+                
+                String directorioBase = System.getProperty("user.dir");
+                Path rutaAbsoluta = Paths.get(archivo.getAbsolutePath());
+                Path rutaBase = Paths.get(directorioBase);
+                Path rutaRelativa = rutaBase.relativize(rutaAbsoluta);
+                
+                System.out.println("Fichero cargado: " + rutaRelativa.toString());
+                cargarImagen(rutaRelativa.toString());
             }
         }
 

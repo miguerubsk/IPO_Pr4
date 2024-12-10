@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  *
@@ -32,21 +32,21 @@ public class GuardarDatos {
     private FileWriter fichero = null;
     private PrintWriter pw = null;
 
-    public GuardarDatos(Vector<Libro> libros, String nombreArchivo) {
+    public GuardarDatos(ArrayList<Libro> libros, String nombreArchivo) {
         try {
-            File file = new File(nombreArchivo + ".txt");
+            File file = new File(nombreArchivo + ".tsv");
             if (!file.exists()) {
                 file.createNewFile();
             } else {
                 file.delete();
                 file.createNewFile();
             }
-            fichero = new FileWriter(nombreArchivo + ".txt");
+            fichero = new FileWriter(nombreArchivo + ".tsv");
             pw = new PrintWriter(fichero);
 
-            for (Libro libro : libros) {
-                pw.write(libro.getNombre() + ";" + libro.getAutor() + ";" + libro.getGenero() + ";" + libro.getAño() + ";" + libro.getRutaImagen() + ";\n");
-            }
+            libros.forEach(libro -> {
+                pw.write(libro.getNombre() + "\t" + libro.getAutor() + "\t" + libro.getGenero() + "\t" + libro.getAño() + "\t" + libro.getRutaImagen() + "\t\n");
+            });
             fichero.close();
         } catch (IOException e) {
             System.err.println(e.toString());
