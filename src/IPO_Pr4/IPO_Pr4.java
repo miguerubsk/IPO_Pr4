@@ -62,6 +62,7 @@ public class IPO_Pr4 {
     static private javax.swing.JMenuItem menuItemAyuda;
 
     static private Inicio inicio;
+    static private JFrame frame;
 
     /**
      * @param args the command line arguments
@@ -74,13 +75,13 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
+     *
      */
     private static void cargarIdiomas() {
         try {
             idiomas = new Idiomas("idiomas.txt");
         } catch (IOException ex) {
-            Logger.getLogger(IPO_Pr4.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(IPO_Pr4.class.getName()).log(Level.SEVERE, "Error al leer el fichero", ex);
         }
 
         jMenu1Text = idiomas.getIdioma(0).get(1);
@@ -95,10 +96,10 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
+     *
      */
     private static void crearVentana() {
-        JFrame frame = new JFrame("Gestor de libros");
+        frame = new JFrame(idiomas.getIdioma(0).get(29));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(500, 300));
         inicio = new Inicio(frame, idiomas.getIdioma(0), idiomas.getImagenesIdioma(0));
@@ -115,8 +116,8 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
-     * @param frame 
+     *
+     * @param frame
      */
     private static void crearMenuBar(JFrame frame) {
         menuBar = new javax.swing.JMenuBar();
@@ -233,8 +234,9 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
-     * @param cual el idioma al que se quiera cambiar, por orden de aparición en el fichero de idiomas
+     *
+     * @param cual el idioma al que se quiera cambiar, por orden de aparición en
+     * el fichero de idiomas
      */
     public static void cambiarIdioma(int cual) {
         jMenu1Text = idiomas.getIdioma(cual).get(1);
@@ -245,6 +247,7 @@ public class IPO_Pr4 {
         jMenuItem4Text = idiomas.getIdioma(cual).get(12);
         jMenuItem5Text = idiomas.getIdioma(cual).get(13);
         textoAyuda = idiomas.getIdioma(cual).get(14);
+        frame.setTitle(idiomas.getIdioma(cual).get(29));
 
         menuArchivo.setText(jMenu1Text);//Archivo
         menuItemIdioma.setText(jMenu3Text); //Idioma
@@ -256,8 +259,9 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
-     * @param ruta ruta donde se encuentra el archivo con los datos que se quieran cargar
+     *
+     * @param ruta ruta donde se encuentra el archivo con los datos que se
+     * quieran cargar
      */
     public static void cargarDatos(String ruta) {
         inicio.cargarDatos(ruta);

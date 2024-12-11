@@ -17,9 +17,10 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
@@ -35,29 +36,32 @@ public class Idiomas {
 
     /**
      * Lee y carga en memoria el fichero con los diferentes idiomas
+     *
      * @param fichero ruta al fichero que contiene los idiomas
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public Idiomas(String fichero) throws FileNotFoundException, IOException {
-        FileReader f = new FileReader(fichero);
-        BufferedReader b = new BufferedReader(f);
 
-        numIdiomas = Integer.parseInt(b.readLine());
+        FileInputStream fis = new FileInputStream(fichero);
+        InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+        BufferedReader br = new BufferedReader(isr);
+
+        numIdiomas = Integer.parseInt(br.readLine());
         idiomas = new ArrayList<>();
         imagenes = new ArrayList<>();
         for (int i = 0; i < numIdiomas; i++) {
             ArrayList<String> idioma = new ArrayList<>();
-            idioma.add(b.readLine());
-            int numPalabras = Integer.parseInt(b.readLine());
+            idioma.add(br.readLine());
+            int numPalabras = Integer.parseInt(br.readLine());
             for (int j = 0; j < numPalabras; j++) {
-                idioma.add(b.readLine());
+                idioma.add(br.readLine());
             }
 
             ArrayList<ImageIcon> imagenesAux = new ArrayList<>();
-            int numImagenes = Integer.parseInt(b.readLine());
+            int numImagenes = Integer.parseInt(br.readLine());
             for (int j = 0; j < numImagenes; j++) {
-                imagenesAux.add(new ImageIcon(b.readLine()));
+                imagenesAux.add(new ImageIcon(br.readLine()));
             }
 
             idiomas.add(idioma);
@@ -66,7 +70,7 @@ public class Idiomas {
     }
 
     /**
-     * 
+     *
      * @return Una lista de listas con los idiomas
      */
     public ArrayList<ArrayList<String>> getIdiomas() {
@@ -74,8 +78,9 @@ public class Idiomas {
     }
 
     /**
-     * 
-     * @param cual el idioma que se quiera obtener por orden según aparece en el fichero
+     *
+     * @param cual el idioma que se quiera obtener por orden según aparece en el
+     * fichero
      * @return Una lista con los textos del idioma
      */
     public ArrayList<String> getIdioma(int cual) {
@@ -83,7 +88,7 @@ public class Idiomas {
     }
 
     /**
-     * 
+     *
      * @return una lista de listas con los diferentes idiomas
      */
     public ArrayList<ArrayList<ImageIcon>> getImagenes() {
@@ -91,8 +96,9 @@ public class Idiomas {
     }
 
     /**
-     * 
-     * @param cual el idioma que se quiera obtener por orden según aparece en el fichero
+     *
+     * @param cual el idioma que se quiera obtener por orden según aparece en el
+     * fichero
      * @return Una lista con las imágenes del idioma
      */
     public ArrayList<ImageIcon> getImagenesIdioma(int cual) {
@@ -100,7 +106,7 @@ public class Idiomas {
     }
 
     /**
-     * 
+     *
      * @return el número de idiomas cargados
      */
     public int getNumIdiomas() {

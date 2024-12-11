@@ -1,6 +1,6 @@
 2
 es
-28
+29
 Archivo
 Idioma
 Salir
@@ -29,10 +29,11 @@ No
 Los campos "Nombre", "Autor" y "Género" son obligatorios.
 Añadir imagen
 Debe seleccionar un libro
+Gestor de libros
 1
 images/covers/portada.jpg
 en
-28
+29
 Archive
 Language
 Exit
@@ -61,5 +62,6 @@ No
 The fields "Name", "Author" and "Genre" are required.
 Add image
 You must select a book
+Book manager
 1
 images/covers/cover.jpg
