@@ -114,21 +114,21 @@ public final class Inicio extends javax.swing.JPanel {
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         });
     }
-    
-    public void mostrarError(int texto, JPanel padre){
+
+    public void mostrarError(int texto, JPanel padre) {
         JOptionPane optionPane = new JOptionPane(
-                    idioma.get(texto),
-                    JOptionPane.ERROR_MESSAGE,
-                    JOptionPane.DEFAULT_OPTION,
-                    null,
-                    new Object[]{},
-                    null
-            );
-            JDialog dialogo = optionPane.createDialog(padre, idioma.get(18));
-            JButton botonAceptar = new JButton(idioma.get(3));
-            botonAceptar.addActionListener(e2 -> dialogo.dispose());
-            optionPane.setOptions(new Object[]{botonAceptar});
-            dialogo.setVisible(true);
+                idioma.get(texto),
+                JOptionPane.ERROR_MESSAGE,
+                JOptionPane.DEFAULT_OPTION,
+                null,
+                new Object[]{},
+                null
+        );
+        JDialog dialogo = optionPane.createDialog(padre, idioma.get(18));
+        JButton botonAceptar = new JButton(idioma.get(3));
+        botonAceptar.addActionListener(e2 -> dialogo.dispose());
+        optionPane.setOptions(new Object[]{botonAceptar});
+        dialogo.setVisible(true);
     }
 
     /**
@@ -201,7 +201,8 @@ public final class Inicio extends javax.swing.JPanel {
     /**
      *
      * @param idioma lista con los textos del idioma al que se quiere cambiar
-     * @param imagenes lista con las imágenes del idioma al que se quiere cambiar
+     * @param imagenes lista con las imágenes del idioma al que se quiere
+     * cambiar
      */
     public void setIdioma(ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         this.idioma = idioma;

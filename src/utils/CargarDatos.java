@@ -32,10 +32,10 @@ public class CargarDatos {
     private final ArrayList<Libro> datos;
 
     /**
-     * 
+     *
      * @param fichero fichero que contiene los datos a cargar
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public CargarDatos(String fichero) throws FileNotFoundException, IOException {
         this.datos = new ArrayList<>();
@@ -52,7 +52,7 @@ public class CargarDatos {
     }
 
     /**
-     * 
+     *
      * @return un ArrayList con los libros que se han cargado
      */
     public ArrayList<Libro> getDatos() {

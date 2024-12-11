@@ -75,13 +75,13 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
+     *
      */
     private static void cargarIdiomas() {
         try {
             idiomas = new Idiomas("idiomas.txt");
         } catch (IOException ex) {
-            Logger.getLogger(IPO_Pr4.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(IPO_Pr4.class.getName()).log(Level.SEVERE, "Error al leer el fichero", ex);
         }
 
         jMenu1Text = idiomas.getIdioma(0).get(1);
@@ -96,7 +96,7 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
+     *
      */
     private static void crearVentana() {
         frame = new JFrame(idiomas.getIdioma(0).get(29));
@@ -116,8 +116,8 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
-     * @param frame 
+     *
+     * @param frame
      */
     private static void crearMenuBar(JFrame frame) {
         menuBar = new javax.swing.JMenuBar();
@@ -234,8 +234,9 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
-     * @param cual el idioma al que se quiera cambiar, por orden de aparición en el fichero de idiomas
+     *
+     * @param cual el idioma al que se quiera cambiar, por orden de aparición en
+     * el fichero de idiomas
      */
     public static void cambiarIdioma(int cual) {
         jMenu1Text = idiomas.getIdioma(cual).get(1);
@@ -258,8 +259,9 @@ public class IPO_Pr4 {
     }
 
     /**
-     * 
-     * @param ruta ruta donde se encuentra el archivo con los datos que se quieran cargar
+     *
+     * @param ruta ruta donde se encuentra el archivo con los datos que se
+     * quieran cargar
      */
     public static void cargarDatos(String ruta) {
         inicio.cargarDatos(ruta);
