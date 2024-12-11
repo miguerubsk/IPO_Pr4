@@ -17,9 +17,10 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
@@ -40,8 +41,7 @@ public class Idiomas {
      * @throws IOException 
      */
     public Idiomas(String fichero) throws FileNotFoundException, IOException {
-        FileReader f = new FileReader(fichero);
-        BufferedReader b = new BufferedReader(f);
+        BufferedReader b = new BufferedReader(new InputStreamReader(new FileInputStream(fichero), "UTF-8"));
 
         numIdiomas = Integer.parseInt(b.readLine());
         idiomas = new ArrayList<>();
