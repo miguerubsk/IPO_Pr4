@@ -62,6 +62,7 @@ public class IPO_Pr4 {
     static private javax.swing.JMenuItem menuItemAyuda;
 
     static private Inicio inicio;
+    static private JFrame frame;
 
     /**
      * @param args the command line arguments
@@ -98,7 +99,7 @@ public class IPO_Pr4 {
      * 
      */
     private static void crearVentana() {
-        JFrame frame = new JFrame("Gestor de libros");
+        frame = new JFrame(idiomas.getIdioma(0).get(29));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(500, 300));
         inicio = new Inicio(frame, idiomas.getIdioma(0), idiomas.getImagenesIdioma(0));
@@ -245,6 +246,7 @@ public class IPO_Pr4 {
         jMenuItem4Text = idiomas.getIdioma(cual).get(12);
         jMenuItem5Text = idiomas.getIdioma(cual).get(13);
         textoAyuda = idiomas.getIdioma(cual).get(14);
+        frame.setTitle(idiomas.getIdioma(cual).get(29));
 
         menuArchivo.setText(jMenu1Text);//Archivo
         menuItemIdioma.setText(jMenu3Text); //Idioma
