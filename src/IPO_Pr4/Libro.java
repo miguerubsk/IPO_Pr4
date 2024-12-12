@@ -149,6 +149,21 @@ public class Libro {
     }
 
     @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Libro{\n\tnombre=").append(nombre);
+        sb.append("\n\tautor=").append(autor);
+        sb.append("\n\tgenero=").append(genero);
+        sb.append("\n\ta\u00f1o=").append(año);
+        sb.append("\n\trutaImagen=").append(rutaImagen);
+        sb.append("\n\ttieneImagen=").append(tieneImagen);
+        sb.append("\n}");
+        return sb.toString();
+    }
+    
+    
+
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 29 * hash + Objects.hashCode(this.nombre);

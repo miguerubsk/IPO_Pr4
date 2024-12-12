@@ -38,9 +38,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -49,13 +52,14 @@ import javax.swing.ListSelectionModel;
 public final class Inicio extends javax.swing.JPanel {
 
     private final JFrame framePadre;
-    private Nuevo nuevo;
+    public Nuevo nuevo;
     private Edicion edicion;
     private CargarDatos cd;
     private final String separador = " | ";
-    private JDialog dialogoEmergente;
+    public JDialog dialogoEmergente;
 
     private final DefaultListModel listModel;
+    private final DefaultListModel filteredListModel;
 
     ArrayList<String> idioma;
 
@@ -80,8 +84,13 @@ public final class Inicio extends javax.swing.JPanel {
         cambiarIdioma();
 
         this.listModel = new DefaultListModel();
+        this.filteredListModel = new DefaultListModel();
+
         addLibrosInicio();
-        list.setModel(listModel);
+
+        list.setModel(filteredListModel);
+        campoBuscar.getDocument().addDocumentListener(new BuscarListener());
+
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.setVisibleRowCount(5);
@@ -113,6 +122,18 @@ public final class Inicio extends javax.swing.JPanel {
         vectorLibros.forEach((var libro) -> {
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         });
+
+        updateFilteredListModel("");
+    }
+
+    private void updateFilteredListModel(String filterText) {
+        filteredListModel.clear();
+        for (int i = 0; i < listModel.getSize(); i++) {
+            String item = listModel.getElementAt(i).toString();
+            if (item.toLowerCase().contains(filterText.toLowerCase())) {
+                filteredListModel.addElement(item);
+            }
+        }
     }
 
     public void mostrarError(int texto, JPanel padre) {
@@ -135,7 +156,7 @@ public final class Inicio extends javax.swing.JPanel {
      *
      * @param inicio panel de inicio
      */
-    private void gestionarEdicion(JPanel inicio) {
+    public void gestionarEdicion(JPanel inicio) {
         int elementoSeleccionado = list.getSelectedIndex();
         if (elementoSeleccionado < 0) {
             mostrarError(28, inicio);
@@ -147,9 +168,10 @@ public final class Inicio extends javax.swing.JPanel {
             libroAnterior = vectorLibros.get(elementoSeleccionado);
             vectorLibros.remove(elementoSeleccionado);
             listModel.remove(elementoSeleccionado);
+            filteredListModel.remove(elementoSeleccionado);
 
             dialogoEmergente = new JDialog(framePadre, idioma.get(20), true);
-            dialogoEmergente.setSize(new Dimension(500, 400));
+            dialogoEmergente.setSize(new Dimension(500, 325));
             dialogoEmergente.setLocationRelativeTo(framePadre);
             dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
             dialogoEmergente.add(edicion);
@@ -176,6 +198,7 @@ public final class Inicio extends javax.swing.JPanel {
         } else {
             vectorLibros.add(libro);
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
+            filteredListModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         }
     }
 
@@ -185,6 +208,7 @@ public final class Inicio extends javax.swing.JPanel {
     public void restaurarLibro() {
         vectorLibros.add(libroAnterior);
         listModel.addElement(libroAnterior.getNombre() + separador + libroAnterior.getAutor() + separador + libroAnterior.getGenero());
+        filteredListModel.addElement(libroAnterior.getNombre() + separador + libroAnterior.getAutor() + separador + libroAnterior.getGenero());
     }
 
     /**
@@ -195,7 +219,11 @@ public final class Inicio extends javax.swing.JPanel {
         deleteButton.setText(idioma.get(6));
         modifyButton.setText(idioma.get(20));
         jLabelLibros.setText(idioma.get(17));
-        imagenLang.setIcon(new ImageIcon(new ImageIcon("images/" + idioma.getFirst() + ".png").getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
+        campoBuscar.setText(idioma.get(31));
+        if (filteredListModel != null) {
+            updateFilteredListModel("");
+        }
+        imagenLang.setIcon(new ImageIcon(imagenes.get(1).getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
     }
 
     /**
@@ -210,6 +238,26 @@ public final class Inicio extends javax.swing.JPanel {
         cambiarIdioma();
     }
 
+    public JFrame getFramePadre() {
+        return framePadre;
+    }
+
+    public Nuevo getNuevo() {
+        return nuevo;
+    }
+
+    public ArrayList<String> getIdioma() {
+        return idioma;
+    }
+
+    public ArrayList<ImageIcon> getImagenes() {
+        return imagenes;
+    }
+
+    public JList<String> getList() {
+        return list;
+    }
+
     /**
      *
      * @param ruta relativa al archivo con los datos
@@ -218,19 +266,27 @@ public final class Inicio extends javax.swing.JPanel {
 
         try {
             CargarDatos cargaDatos = new CargarDatos(ruta);
-            cargaDatos.getDatos().stream().filter(dato -> (!vectorLibros.contains(dato))).forEachOrdered(dato -> {
-                vectorLibros.add(dato);
-            });
+            for (Libro libro : cargaDatos.getDatos()) {
+                if (vectorLibros.contains(libro)) {
+                    System.out.println("Libro duplicado:\n" + libro.toString());
+
+                } else {
+                    vectorLibros.add(libro);
+                }
+            }
         } catch (IOException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Collections.sort(vectorLibros, (Libro p1, Libro p2) -> p1.getAutor().compareTo(p2.getAutor()));
 
+        listModel.clear();
+        filteredListModel.clear();
         vectorLibros.forEach(libro -> {
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
+            filteredListModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         });
-
+        updateFilteredListModel("");
     }
 
     /**
@@ -246,6 +302,14 @@ public final class Inicio extends javax.swing.JPanel {
      */
     public JDialog getDialogoEmergente() {
         return dialogoEmergente;
+    }
+
+    public DefaultListModel getListModel() {
+        return listModel;
+    }
+
+    public ArrayList<Libro> getVectorLibros() {
+        return vectorLibros;
     }
 
     class MouseListener extends MouseAdapter {
@@ -292,12 +356,14 @@ public final class Inicio extends javax.swing.JPanel {
             nuevo = new Nuevo(inicio, libro, idioma, imagenes);
 
             dialogoEmergente = new JDialog(framePadre, idioma.get(5), true);
-            dialogoEmergente.setSize(new Dimension(500, 400));
+            dialogoEmergente.setSize(new Dimension(500, 325));
             dialogoEmergente.setLocationRelativeTo(framePadre);
             dialogoEmergente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialogoEmergente.add(nuevo);
+            dialogoEmergente.getRootPane().setDefaultButton(nuevo.saveButton);
 
             dialogoEmergente.setVisible(true);
+            updateFilteredListModel("");
         }
     }
 
@@ -321,11 +387,36 @@ public final class Inicio extends javax.swing.JPanel {
             switch (confirm) {
                 case JOptionPane.YES_OPTION -> {
                     listModel.removeElementAt(elementoSeleccionado);
+                    filteredListModel.removeElementAt(elementoSeleccionado);
                     vectorLibros.remove(elementoSeleccionado);
+                    updateFilteredListModel("");
                 }
                 default -> {
                 }
             }
+        }
+    }
+
+    class BuscarListener implements DocumentListener {
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            filterList();
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            filterList();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            filterList();
+        }
+
+        private void filterList() {
+            String searchText = campoBuscar.getText();
+            updateFilteredListModel(searchText);
         }
     }
 
@@ -346,6 +437,7 @@ public final class Inicio extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         modifyButton = new javax.swing.JButton();
         imagenLang = new javax.swing.JLabel();
+        campoBuscar = new javax.swing.JTextField();
 
         list.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         list.setModel(new javax.swing.AbstractListModel<String>() {
@@ -376,6 +468,8 @@ public final class Inicio extends javax.swing.JPanel {
             }
         });
 
+        campoBuscar.setText("jTextField1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -385,17 +479,20 @@ public final class Inicio extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelLibros)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelLibros)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(campoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 14, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -411,8 +508,10 @@ public final class Inicio extends javax.swing.JPanel {
                         .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(modifyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(campoBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -424,6 +523,7 @@ public final class Inicio extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
+    private javax.swing.JTextField campoBuscar;
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel imagenLang;
     private javax.swing.JLabel jLabelLibros;

@@ -47,7 +47,11 @@ public class CargarDatos {
             String[] aux = new String[5];
             System.arraycopy(split, 0, aux, 0, split.length);
             Libro nuevoLibro = new Libro(aux[0], aux[1], aux[2], aux[3], aux[4]);
-            datos.add(nuevoLibro);
+            if (!datos.contains(nuevoLibro)) {
+                datos.add(nuevoLibro);
+            }else{
+                System.err.println("Libro duplicado:\n" + nuevoLibro.toString());
+            }
         }
     }
 
