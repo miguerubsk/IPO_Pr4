@@ -2,3 +2,6 @@
 /nbproject/private/
 /build/
 /GonzálezGarcíaMiguel/
+/Output/
+*.iss
+*.exe
