@@ -50,6 +50,7 @@ public final class Edicion extends javax.swing.JPanel {
      */
     public Edicion(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
+        this.saveButton.requestFocusInWindow();
         this.panelAnterior = panelAnterior;
         this.libro = libro;
         this.idioma = idioma;
@@ -226,7 +227,7 @@ public final class Edicion extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldAutor;
     private javax.swing.JTextField jTextFieldGenero;
     private javax.swing.JTextField jTextFieldNombre;
-    private javax.swing.JButton saveButton;
+    public javax.swing.JButton saveButton;
     private javax.swing.JButton volverButton;
     // End of variables declaration//GEN-END:variables
 

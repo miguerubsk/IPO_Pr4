@@ -18,6 +18,7 @@ package IPO_Pr4;
 
 import utils.Idiomas;
 import interfaces.Inicio;
+import interfaces.Nuevo;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -40,25 +42,33 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class IPO_Pr4 {
 
-    static private String jMenu1Text;
-    static private String jMenu3Text;
-    static private String jMenuItem2Text;
-    static private String jMenu2Text;
-    private static String jMenuItem3Text;
-    private static String jMenuItem4Text;
-    private static String jMenuItem5Text;
+    static private String jMenuTextArchivo;
+    static private String jMenuTextIdioma;
+    static private String jMenuItemTextSalir;
+    static private String jMenuTextAyuda;
+    private static String jMenuItemTextAbrir;
+    private static String jMenuItemTextGuardar;
+    private static String jMenuItemTextAyuda;
+    private static String jMenuItemTextOperaciones;
+    private static String jMenuItemTextNuevo;
+    private static String jMenuItemTextBorrar;
+    private static String jMenuItemTextModificar;
     private static String textoAyuda;
     private static String tituloAyuda;
 
     static private Idiomas idiomas;
 
     static private javax.swing.JMenu menuArchivo;
-    static private javax.swing.JMenu menuAyuda;
+    static private javax.swing.JMenu menuOperaciones;
+    //static private javax.swing.JMenu menuAyuda;
     static private javax.swing.JMenuBar menuBar;
     static private javax.swing.JMenuItem menuItemSalir;
     static private javax.swing.JMenuItem menuItemIdioma;
     static private javax.swing.JMenuItem menuItemAbrir;
     static private javax.swing.JMenuItem menuItemGuardar;
+    static private javax.swing.JMenuItem menuItemNuevo;
+    static private javax.swing.JMenuItem menuItemBorrar;
+    static private javax.swing.JMenuItem menuItemModificar;
     static private javax.swing.JMenuItem menuItemAyuda;
 
     static private Inicio inicio;
@@ -84,15 +94,19 @@ public class IPO_Pr4 {
             Logger.getLogger(IPO_Pr4.class.getName()).log(Level.SEVERE, "Error al leer el fichero", ex);
         }
 
-        jMenu1Text = idiomas.getIdioma(0).get(1);
-        jMenu3Text = idiomas.getIdioma(0).get(2);
-        jMenuItem2Text = idiomas.getIdioma(0).get(3);
-        jMenu2Text = idiomas.getIdioma(0).get(4);
-        jMenuItem3Text = idiomas.getIdioma(0).get(11);
-        jMenuItem4Text = idiomas.getIdioma(0).get(12);
-        jMenuItem5Text = idiomas.getIdioma(0).get(13);
+        jMenuTextArchivo = idiomas.getIdioma(0).get(1);
+        jMenuTextIdioma = idiomas.getIdioma(0).get(2);
+        jMenuItemTextSalir = idiomas.getIdioma(0).get(3);
+        jMenuTextAyuda = idiomas.getIdioma(0).get(4);
+        jMenuItemTextAbrir = idiomas.getIdioma(0).get(11);
+        jMenuItemTextGuardar = idiomas.getIdioma(0).get(12);
+        jMenuItemTextAyuda = idiomas.getIdioma(0).get(13);
         textoAyuda = idiomas.getIdioma(0).get(14);
         tituloAyuda = idiomas.getIdioma(0).get(21);
+        jMenuItemTextOperaciones = idiomas.getIdioma(0).get(30);
+        jMenuItemTextNuevo = idiomas.getIdioma(0).get(5);
+        jMenuItemTextBorrar = idiomas.getIdioma(0).get(6);
+        jMenuItemTextModificar = idiomas.getIdioma(0).get(20);
     }
 
     /**
@@ -121,38 +135,59 @@ public class IPO_Pr4 {
      */
     private static void crearMenuBar(JFrame frame) {
         menuBar = new javax.swing.JMenuBar();
-        menuArchivo = new javax.swing.JMenu();
-        menuArchivo.setText(jMenu1Text);//Archivo
-        menuItemAbrir = new javax.swing.JMenuItem();
-        menuItemAbrir.setText(jMenuItem3Text);
+        //Menu archivo
+        menuArchivo = new javax.swing.JMenu(); //Archivo
+        menuArchivo.setText(jMenuTextArchivo); //Archivo
+        menuItemAbrir = new javax.swing.JMenuItem(); //Abrir
+        menuItemAbrir.setText(jMenuItemTextAbrir); //Abrir
         menuItemAbrir.addActionListener(new AbrirListener(frame));
-        menuItemGuardar = new javax.swing.JMenuItem();
-        menuItemGuardar.setText(jMenuItem4Text);
+        menuItemGuardar = new javax.swing.JMenuItem(); //Guardar
+        menuItemGuardar.setText(jMenuItemTextGuardar); //Guardar
         menuItemGuardar.addActionListener(new GuardarListener(frame));
-        menuItemIdioma = new javax.swing.JMenu();
-        menuItemIdioma.setText(jMenu3Text); //Idioma
+        menuItemIdioma = new javax.swing.JMenu(); //Menu Idioma
+        menuItemIdioma.setText(jMenuTextIdioma); //Idioma
         for (int i = 0; i < idiomas.getNumIdiomas(); i++) {
             JMenuItem menuItemAux = new JMenuItem(idiomas.getIdioma(i).getFirst());
             menuItemAux.addActionListener(new IdiomaListener(i));
             menuItemIdioma.add(menuItemAux);
-            menuItemAux.setIcon(new ImageIcon(new ImageIcon("images/" + idiomas.getIdioma(i).getFirst() + ".png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+            menuItemAux.setIcon(new ImageIcon(idiomas.getImagenesIdioma(i).get(1).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         }
-        menuItemSalir = new javax.swing.JMenuItem();
-        menuItemSalir.setText(jMenuItem2Text);//Salir
-        menuItemSalir.addActionListener(new CloseListener());
-        menuAyuda = new javax.swing.JMenu();
-        menuAyuda.setText(jMenu2Text); //Ayuda
+        menuItemSalir = new javax.swing.JMenuItem(); //Salir
+        menuItemSalir.setText(jMenuItemTextSalir); //Salir
+        menuItemSalir.addActionListener(new CloseListener()); //Salir
+        
+        //Menu operaciones
+        menuOperaciones = new javax.swing.JMenu();
+        menuOperaciones.setText(jMenuItemTextOperaciones);
+        
+        menuItemNuevo = new javax.swing.JMenuItem(); //Nuevo
+        menuItemNuevo.setText(jMenuItemTextNuevo); //Nuevo
+        menuItemNuevo.addActionListener(new NuevoListener(inicio)); //Nuevo
+        
+        menuItemBorrar = new javax.swing.JMenuItem(); //Borrar
+        menuItemBorrar.setText(jMenuItemTextBorrar); //Borrar
+        menuItemBorrar.addActionListener(new EliminarListener(inicio)); //Borrar
+        
+        menuItemModificar = new javax.swing.JMenuItem(); //Modificar
+        menuItemModificar.setText(jMenuItemTextModificar); //Modificar
+        menuItemModificar.addActionListener(new ModificarListener(inicio)); //modificar
+        
+        //Menu Ayuda
         menuItemAyuda = new javax.swing.JMenuItem();
-        menuItemAyuda.setText(jMenuItem5Text);
+        menuItemAyuda.setText(jMenuItemTextAyuda);
         menuItemAyuda.addActionListener(new AyudaListener(frame));
 
         menuArchivo.add(menuItemAbrir);
         menuArchivo.add(menuItemGuardar);
-        menuArchivo.add(menuItemIdioma);
         menuArchivo.add(menuItemSalir);
-        menuAyuda.add(menuItemAyuda);
+        menuOperaciones.add(menuItemNuevo);
+        menuOperaciones.add(menuItemBorrar);
+        menuOperaciones.add(menuItemModificar);
+        //menuAyuda.add(menuItemAyuda);
         menuBar.add(menuArchivo);
-        menuBar.add(menuAyuda);
+        menuBar.add(menuOperaciones);
+        menuBar.add(menuItemIdioma);
+        menuBar.add(menuItemAyuda);
     }
 
     static class IdiomaListener implements ActionListener {
@@ -181,9 +216,10 @@ public class IPO_Pr4 {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFileChooser selectorArchivos = new JFileChooser();
+            selectorArchivos.setCurrentDirectory(new File(System.getProperty("user.dir")));
             selectorArchivos.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    ".txt", "txt");
+                    ".tsv", "tsv");
             selectorArchivos.setFileFilter(filter);
             int resultado = selectorArchivos.showOpenDialog(frame);
 
@@ -206,6 +242,72 @@ public class IPO_Pr4 {
         @Override
         public void actionPerformed(ActionEvent e) {
             inicio.guardarDatos();
+        }
+    }
+    
+    static class ModificarListener implements ActionListener {
+
+        Inicio inicio;
+
+        public ModificarListener(Inicio JPanel) {
+            this.inicio = JPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            inicio.gestionarEdicion(inicio);
+        }
+    }
+
+    static class NuevoListener implements ActionListener {
+
+        Inicio inicio;
+
+        public NuevoListener(Inicio JPanel) {
+            this.inicio = JPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Libro libro = new Libro();
+            inicio.nuevo = new Nuevo(inicio, libro, inicio.getIdioma(), inicio.getImagenes());
+
+            inicio.dialogoEmergente = new JDialog(frame, inicio.getIdioma().get(5), true);
+            inicio.dialogoEmergente.setSize(new Dimension(500, 325));
+            inicio.dialogoEmergente.setLocationRelativeTo(frame);
+            inicio.dialogoEmergente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            inicio.dialogoEmergente.add(inicio.nuevo);
+            inicio.dialogoEmergente.getRootPane().setDefaultButton(inicio.nuevo.saveButton);
+
+            inicio.dialogoEmergente.setVisible(true);
+        }
+    }
+
+    static class EliminarListener implements ActionListener {
+
+        Inicio inicio;
+
+        public EliminarListener(Inicio JPanel) {
+            this.inicio = JPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int elementoSeleccionado = inicio.getList().getSelectedIndex();
+            inicio.getList().setSelectedIndex(elementoSeleccionado);
+            inicio.getList().ensureIndexIsVisible(elementoSeleccionado);
+
+            Object[] opciones = {inicio.getIdioma().get(24), inicio.getIdioma().get(25)};
+            int confirm = JOptionPane.showOptionDialog(inicio, inicio.getIdioma().get(22), inicio.getIdioma().get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+            switch (confirm) {
+                case JOptionPane.YES_OPTION -> {
+                    inicio.getListModel().removeElementAt(elementoSeleccionado);
+                    inicio.getVectorLibros().remove(elementoSeleccionado);
+                }
+                default -> {
+                }
+            }
         }
     }
 
@@ -239,23 +341,30 @@ public class IPO_Pr4 {
      * el fichero de idiomas
      */
     public static void cambiarIdioma(int cual) {
-        jMenu1Text = idiomas.getIdioma(cual).get(1);
-        jMenu3Text = idiomas.getIdioma(cual).get(2);
-        jMenuItem2Text = idiomas.getIdioma(cual).get(3);
-        jMenu2Text = idiomas.getIdioma(cual).get(4);
-        jMenuItem3Text = idiomas.getIdioma(cual).get(11);
-        jMenuItem4Text = idiomas.getIdioma(cual).get(12);
-        jMenuItem5Text = idiomas.getIdioma(cual).get(13);
+        jMenuTextArchivo = idiomas.getIdioma(cual).get(1);
+        jMenuTextIdioma = idiomas.getIdioma(cual).get(2);
+        jMenuItemTextSalir = idiomas.getIdioma(cual).get(3);
+        jMenuItemTextOperaciones = idiomas.getIdioma(cual).get(30);
+        jMenuItemTextNuevo = idiomas.getIdioma(cual).get(5);
+        jMenuItemTextBorrar = idiomas.getIdioma(cual).get(6);
+        jMenuItemTextModificar = idiomas.getIdioma(cual).get(20);
+        jMenuTextAyuda = idiomas.getIdioma(cual).get(4);
+        jMenuItemTextAbrir = idiomas.getIdioma(cual).get(11);
+        jMenuItemTextGuardar = idiomas.getIdioma(cual).get(12);
+        jMenuItemTextAyuda = idiomas.getIdioma(cual).get(13);
         textoAyuda = idiomas.getIdioma(cual).get(14);
         frame.setTitle(idiomas.getIdioma(cual).get(29));
 
-        menuArchivo.setText(jMenu1Text);//Archivo
-        menuItemIdioma.setText(jMenu3Text); //Idioma
-        menuItemSalir.setText(jMenuItem2Text);//Salir
-        menuAyuda.setText(jMenu2Text);
-        menuItemAbrir.setText(jMenuItem3Text);
-        menuItemGuardar.setText(jMenuItem4Text);
-        menuItemAyuda.setText(jMenuItem5Text);
+        menuArchivo.setText(jMenuTextArchivo);//Archivo
+        menuItemIdioma.setText(jMenuTextIdioma); //Idioma
+        menuItemSalir.setText(jMenuItemTextSalir);//Salir
+        menuItemAbrir.setText(jMenuItemTextAbrir);//Abrir
+        menuItemGuardar.setText(jMenuItemTextGuardar);//Guardar
+        menuOperaciones.setText(jMenuItemTextOperaciones);//Operaciones
+        menuItemNuevo.setText(jMenuItemTextNuevo);//Nuevo
+        menuItemBorrar.setText(jMenuItemTextBorrar);//Borrar
+        menuItemModificar.setText(jMenuItemTextModificar);//Modificar
+        menuItemAyuda.setText(jMenuItemTextAyuda);//Ayuda
     }
 
     /**
