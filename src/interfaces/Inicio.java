@@ -89,7 +89,7 @@ public final class Inicio extends javax.swing.JPanel {
         addLibrosInicio();
 
         list.setModel(filteredListModel);
-        campoBuscar.getDocument().addDocumentListener(new BuscarListener());
+//        campoBuscar.getDocument().addDocumentListener(new BuscarListener());
 
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
@@ -106,6 +106,9 @@ public final class Inicio extends javax.swing.JPanel {
         deleteButton.setIcon(deleteIcon);
         modifyButton.setIcon(modifyIcon);
         setVisible(true);
+        addButton.setVisible(false);
+        deleteButton.setVisible(false);
+        modifyButton.setVisible(false);
     }
 
     /**
@@ -157,12 +160,33 @@ public final class Inicio extends javax.swing.JPanel {
      * @param inicio panel de inicio
      */
     public void gestionarEdicion(JPanel inicio) {
-        int elementoSeleccionado = list.getSelectedIndex();
+
+        // Mostrar una ventana emergente con un campo de texto
+        String userInput = JOptionPane.showInputDialog(null,
+                "Por favor, ingresa tu búsqueda:",
+                "Buscar", JOptionPane.PLAIN_MESSAGE);
+        
+        
+
+        int elementoSeleccionado = -1;
+
+        // Comprobar el resultado
+        if (userInput != null) {
+            System.out.println("Texto ingresado: " + userInput);
+            for (Libro lib : vectorLibros) {
+                if (lib.getNombre().toLowerCase().equals(userInput.toLowerCase())) {
+                    elementoSeleccionado = vectorLibros.indexOf(lib);
+                }
+            }
+        } else {
+            System.out.println("Búsqueda cancelada.");
+        }
+
         if (elementoSeleccionado < 0) {
             mostrarError(28, inicio);
         } else {
-            list.setSelectedIndex(elementoSeleccionado);
-            list.ensureIndexIsVisible(elementoSeleccionado);
+//            list.setSelectedIndex(elementoSeleccionado);
+//            list.ensureIndexIsVisible(elementoSeleccionado);
 
             edicion = new Edicion((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
             libroAnterior = vectorLibros.get(elementoSeleccionado);
@@ -219,11 +243,12 @@ public final class Inicio extends javax.swing.JPanel {
         deleteButton.setText(idioma.get(6));
         modifyButton.setText(idioma.get(20));
         jLabelLibros.setText(idioma.get(17));
-        campoBuscar.setText(idioma.get(31));
+//        campoBuscar.setText(idioma.get(31));
         if (filteredListModel != null) {
             updateFilteredListModel("");
         }
         imagenLang.setIcon(new ImageIcon(imagenes.get(1).getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
+        
     }
 
     /**
@@ -415,8 +440,8 @@ public final class Inicio extends javax.swing.JPanel {
         }
 
         private void filterList() {
-            String searchText = campoBuscar.getText();
-            updateFilteredListModel(searchText);
+//            String searchText = campoBuscar.getText();
+//            updateFilteredListModel(searchText);
         }
     }
 
@@ -437,7 +462,6 @@ public final class Inicio extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         modifyButton = new javax.swing.JButton();
         imagenLang = new javax.swing.JLabel();
-        campoBuscar = new javax.swing.JTextField();
 
         list.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         list.setModel(new javax.swing.AbstractListModel<String>() {
@@ -468,8 +492,6 @@ public final class Inicio extends javax.swing.JPanel {
             }
         });
 
-        campoBuscar.setText("jTextField1");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -479,20 +501,17 @@ public final class Inicio extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelLibros)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(campoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabelLibros)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 14, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -509,9 +528,7 @@ public final class Inicio extends javax.swing.JPanel {
                         .addComponent(modifyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(campoBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -523,7 +540,6 @@ public final class Inicio extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
-    private javax.swing.JTextField campoBuscar;
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel imagenLang;
     private javax.swing.JLabel jLabelLibros;
