@@ -60,6 +60,8 @@ public final class Inicio extends javax.swing.JPanel {
     private final JFrame framePadre;
     public Nuevo nuevo;
     private Edicion edicion;
+    private Consulta consulta;
+    private Borrar borrado;
     private CargarDatos cd;
     private final String separador = " | ";
     public JDialog dialogoEmergente;
@@ -168,7 +170,6 @@ public final class Inicio extends javax.swing.JPanel {
      */
     public void gestionarEdicion(JPanel inicio) {
 
-        // Mostrar una ventana emergente con un campo de texto
 //        String userInput = JOptionPane.showInputDialog(null,
 //                idioma.get(32),
 //                idioma.get(31), JOptionPane.PLAIN_MESSAGE);
@@ -178,7 +179,7 @@ public final class Inicio extends javax.swing.JPanel {
             case -1 ->
                 mostrarError(28, inicio);
             case -2 ->
-                System.out.println("El usuario no ha introducido datos");
+                System.out.println("El usuario ha cancelado la operación");
             default -> {
                 edicion = new Edicion((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
                 libroAnterior = vectorLibros.get(elementoSeleccionado);
@@ -187,7 +188,7 @@ public final class Inicio extends javax.swing.JPanel {
 //            filteredListModel.remove(elementoSeleccionado);
 
                 dialogoEmergente = new JDialog(framePadre, idioma.get(20), true);
-                dialogoEmergente.setSize(new Dimension(500, 325));
+                dialogoEmergente.setSize(new Dimension(450, 325));
                 dialogoEmergente.setLocationRelativeTo(framePadre);
                 dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
                 dialogoEmergente.add(edicion);
@@ -205,14 +206,106 @@ public final class Inicio extends javax.swing.JPanel {
                 });
             }
         }
-        // Comprobar el resultado
-        if (elementoSeleccionado == -1) {
-//            mostrarError(28, inicio);
-        } else {
-//            list.setSelectedIndex(elementoSeleccionado);
-//            list.ensureIndexIsVisible(elementoSeleccionado);
+        
+//        if (elementoSeleccionado == -1) {
+////            mostrarError(28, inicio);
+//        } else {
+////            list.setSelectedIndex(elementoSeleccionado);
+////            list.ensureIndexIsVisible(elementoSeleccionado);
+//
+//        }
 
+    }
+    
+    
+    public void gestionarConsulta(JPanel inicio) {
+
+//        String userInput = JOptionPane.showInputDialog(null,
+//                idioma.get(32),
+//                idioma.get(31), JOptionPane.PLAIN_MESSAGE);
+        int elementoSeleccionado = cuadroBuscar();
+
+        switch (elementoSeleccionado) {
+            case -1 ->
+                mostrarError(28, inicio);
+            case -2 ->
+                System.out.println("El usuario ha cancelado la operación");
+            default -> {
+                consulta = new Consulta((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
+//                libroAnterior = vectorLibros.get(elementoSeleccionado);
+//                vectorLibros.remove(elementoSeleccionado);
+//                listModel.remove(elementoSeleccionado);
+//            filteredListModel.remove(elementoSeleccionado);
+
+                dialogoEmergente = new JDialog(framePadre, idioma.get(35), true);
+                dialogoEmergente.setSize(new Dimension(450, 325));
+                dialogoEmergente.setLocationRelativeTo(framePadre);
+//                dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                dialogoEmergente.add(consulta);
+                
+                dialogoEmergente.getRootPane().setDefaultButton(consulta.volverButton);
+
+                dialogoEmergente.setVisible(true);
+
+                dialogoEmergente.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        restaurarLibro();
+                        dialogoEmergente.dispose();
+                    }
+                });
+            }
         }
+        
+//        if (elementoSeleccionado == -1) {
+////            mostrarError(28, inicio);
+//        } else {
+////            list.setSelectedIndex(elementoSeleccionado);
+////            list.ensureIndexIsVisible(elementoSeleccionado);
+//
+//        }
+
+    }
+    
+    public void gestionarBorrado(JPanel inicio) {
+
+//        String userInput = JOptionPane.showInputDialog(null,
+//                idioma.get(32),
+//                idioma.get(31), JOptionPane.PLAIN_MESSAGE);
+        int elementoSeleccionado = cuadroBuscar();
+
+        switch (elementoSeleccionado) {
+            case -1 ->
+                mostrarError(28, inicio);
+            case -2 ->
+                System.out.println("El usuario ha cancelado la operación");
+            default -> {
+                borrado = new Borrar((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
+                libroAnterior = vectorLibros.get(elementoSeleccionado);
+                vectorLibros.remove(elementoSeleccionado);
+                listModel.remove(elementoSeleccionado);
+//            filteredListModel.remove(elementoSeleccionado);
+
+                dialogoEmergente = new JDialog(framePadre, idioma.get(6), true);
+                dialogoEmergente.setSize(new Dimension(450, 325));
+                dialogoEmergente.setLocationRelativeTo(framePadre);
+                dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                dialogoEmergente.add(borrado);
+                
+                dialogoEmergente.getRootPane().setDefaultButton(borrado.volverButton);
+
+                dialogoEmergente.setVisible(true);
+
+            }
+        }
+        
+//        if (elementoSeleccionado == -1) {
+////            mostrarError(28, inicio);
+//        } else {
+////            list.setSelectedIndex(elementoSeleccionado);
+////            list.ensureIndexIsVisible(elementoSeleccionado);
+//
+//        }
 
     }
 
@@ -280,7 +373,7 @@ public final class Inicio extends javax.swing.JPanel {
 //            filteredListModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         }
     }
-
+   
     /**
      *
      */
