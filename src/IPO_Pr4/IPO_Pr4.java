@@ -147,7 +147,7 @@ public class IPO_Pr4 {
         menuItemIdioma = new javax.swing.JMenu(); //Menu Idioma
         menuItemIdioma.setText(jMenuTextIdioma); //Idioma
         for (int i = 0; i < idiomas.getNumIdiomas(); i++) {
-            JMenuItem menuItemAux = new JMenuItem(idiomas.getIdioma(i).getFirst());
+            JMenuItem menuItemAux = new JMenuItem(idiomas.getIdioma(i).get(33));
             menuItemAux.addActionListener(new IdiomaListener(i));
             menuItemIdioma.add(menuItemAux);
             menuItemAux.setIcon(new ImageIcon(idiomas.getImagenesIdioma(i).get(1).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
@@ -155,23 +155,23 @@ public class IPO_Pr4 {
         menuItemSalir = new javax.swing.JMenuItem(); //Salir
         menuItemSalir.setText(jMenuItemTextSalir); //Salir
         menuItemSalir.addActionListener(new CloseListener()); //Salir
-        
+
         //Menu operaciones
         menuOperaciones = new javax.swing.JMenu();
         menuOperaciones.setText(jMenuItemTextOperaciones);
-        
+
         menuItemNuevo = new javax.swing.JMenuItem(); //Nuevo
         menuItemNuevo.setText(jMenuItemTextNuevo); //Nuevo
         menuItemNuevo.addActionListener(new NuevoListener(inicio)); //Nuevo
-        
+
         menuItemBorrar = new javax.swing.JMenuItem(); //Borrar
         menuItemBorrar.setText(jMenuItemTextBorrar); //Borrar
         menuItemBorrar.addActionListener(new EliminarListener(inicio)); //Borrar
-        
+
         menuItemModificar = new javax.swing.JMenuItem(); //Modificar
         menuItemModificar.setText(jMenuItemTextModificar); //Modificar
         menuItemModificar.addActionListener(new ModificarListener(inicio)); //modificar
-        
+
         //Menu Ayuda
         menuItemAyuda = new javax.swing.JMenuItem();
         menuItemAyuda.setText(jMenuItemTextAyuda);
@@ -244,7 +244,7 @@ public class IPO_Pr4 {
             inicio.guardarDatos();
         }
     }
-    
+
     static class ModificarListener implements ActionListener {
 
         Inicio inicio;
@@ -293,19 +293,26 @@ public class IPO_Pr4 {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int elementoSeleccionado = inicio.getList().getSelectedIndex();
-            inicio.getList().setSelectedIndex(elementoSeleccionado);
-            inicio.getList().ensureIndexIsVisible(elementoSeleccionado);
 
-            Object[] opciones = {inicio.getIdioma().get(24), inicio.getIdioma().get(25)};
-            int confirm = JOptionPane.showOptionDialog(inicio, inicio.getIdioma().get(22), inicio.getIdioma().get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+            int elementoSeleccionado = inicio.cuadroBuscar();
 
-            switch (confirm) {
-                case JOptionPane.YES_OPTION -> {
-                    inicio.getListModel().removeElementAt(elementoSeleccionado);
-                    inicio.getVectorLibros().remove(elementoSeleccionado);
-                }
+            switch (elementoSeleccionado) {
+                case -1 ->
+                    inicio.mostrarError(28, inicio);
+                case -2 ->
+                    System.out.println("El usuario ha cancelado la operación");
                 default -> {
+                    Object[] opciones = {inicio.getIdioma().get(24), inicio.getIdioma().get(25)};
+                    int confirm = JOptionPane.showOptionDialog(inicio, inicio.getIdioma().get(22) + " (" + inicio.getVectorLibros().get(elementoSeleccionado).getNombre() + ")", inicio.getIdioma().get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+                    switch (confirm) {
+                        case JOptionPane.YES_OPTION -> {
+                            inicio.getListModel().removeElementAt(elementoSeleccionado);
+                            inicio.getVectorLibros().remove(elementoSeleccionado);
+                        }
+                        default -> {
+                        }
+                    }
                 }
             }
         }

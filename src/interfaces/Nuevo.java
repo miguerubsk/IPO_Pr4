@@ -50,7 +50,7 @@ public final class Nuevo extends javax.swing.JPanel {
      */
     public Nuevo(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
-        this.saveButton.requestFocusInWindow();
+//        this.saveButton.requestFocusInWindow();
         this.panelAnterior = panelAnterior;
         this.libro = libro;
         this.idioma = idioma;
