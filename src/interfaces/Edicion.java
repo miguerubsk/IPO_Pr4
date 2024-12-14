@@ -94,7 +94,7 @@ public final class Edicion extends javax.swing.JPanel {
         jLabelGenero.setText(idioma.get(9));
         jLabelAnio.setText(idioma.get(10));
         saveButton.setText(idioma.get(16));
-        volverButton.setText(idioma.get(15));
+        volverButton.setText(idioma.get(34));
         addImage.setText(idioma.get(27));
         this.revalidate();
         this.repaint();
@@ -148,7 +148,7 @@ public final class Edicion extends javax.swing.JPanel {
 
         saveButton.setText("Guardar");
 
-        volverButton.setText("Volver");
+        volverButton.setText("Cancelar");
 
         addImage.setText("Añadir imagen");
 
@@ -160,8 +160,8 @@ public final class Edicion extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 248, Short.MAX_VALUE)
-                        .addComponent(volverButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(234, 234, 234)
+                        .addComponent(volverButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(saveButton)
                         .addContainerGap())
@@ -175,7 +175,7 @@ public final class Edicion extends javax.swing.JPanel {
                             .addComponent(jLabelAnio, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldAutor, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(imagenLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
