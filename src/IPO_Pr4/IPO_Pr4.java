@@ -53,6 +53,7 @@ public class IPO_Pr4 {
     private static String jMenuItemTextNuevo;
     private static String jMenuItemTextBorrar;
     private static String jMenuItemTextModificar;
+    private static String jMenuItemTextConsultar;
     private static String textoAyuda;
     private static String tituloAyuda;
 
@@ -69,6 +70,7 @@ public class IPO_Pr4 {
     static private javax.swing.JMenuItem menuItemNuevo;
     static private javax.swing.JMenuItem menuItemBorrar;
     static private javax.swing.JMenuItem menuItemModificar;
+    static private javax.swing.JMenuItem menuItemConsultar;
     static private javax.swing.JMenuItem menuItemAyuda;
 
     static private Inicio inicio;
@@ -107,6 +109,7 @@ public class IPO_Pr4 {
         jMenuItemTextNuevo = idiomas.getIdioma(0).get(5);
         jMenuItemTextBorrar = idiomas.getIdioma(0).get(6);
         jMenuItemTextModificar = idiomas.getIdioma(0).get(20);
+        jMenuItemTextConsultar = idiomas.getIdioma(0).get(35);
     }
 
     /**
@@ -171,6 +174,10 @@ public class IPO_Pr4 {
         menuItemModificar = new javax.swing.JMenuItem(); //Modificar
         menuItemModificar.setText(jMenuItemTextModificar); //Modificar
         menuItemModificar.addActionListener(new ModificarListener(inicio)); //modificar
+        
+        menuItemConsultar = new javax.swing.JMenuItem();
+        menuItemConsultar.setText(jMenuItemTextConsultar);
+        menuItemConsultar.addActionListener(new ConsultarListener(inicio));
 
         //Menu Ayuda
         menuItemAyuda = new javax.swing.JMenuItem();
@@ -183,6 +190,8 @@ public class IPO_Pr4 {
         menuOperaciones.add(menuItemNuevo);
         menuOperaciones.add(menuItemBorrar);
         menuOperaciones.add(menuItemModificar);
+        menuOperaciones.add(menuItemConsultar);
+        
         //menuAyuda.add(menuItemAyuda);
         menuBar.add(menuArchivo);
         menuBar.add(menuOperaciones);
@@ -258,6 +267,20 @@ public class IPO_Pr4 {
             inicio.gestionarEdicion(inicio);
         }
     }
+    
+    static class ConsultarListener implements ActionListener {
+
+        Inicio inicio;
+
+        public ConsultarListener(Inicio JPanel) {
+            this.inicio = JPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            inicio.gestionarConsulta(inicio);
+        }
+    }
 
     static class NuevoListener implements ActionListener {
 
@@ -273,7 +296,7 @@ public class IPO_Pr4 {
             inicio.nuevo = new Nuevo(inicio, libro, inicio.getIdioma(), inicio.getImagenes());
 
             inicio.dialogoEmergente = new JDialog(frame, inicio.getIdioma().get(5), true);
-            inicio.dialogoEmergente.setSize(new Dimension(500, 325));
+            inicio.dialogoEmergente.setSize(new Dimension(450, 325));
             inicio.dialogoEmergente.setLocationRelativeTo(frame);
             inicio.dialogoEmergente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             inicio.dialogoEmergente.add(inicio.nuevo);
@@ -293,28 +316,30 @@ public class IPO_Pr4 {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            
+            inicio.gestionarBorrado(inicio);
 
-            int elementoSeleccionado = inicio.cuadroBuscar();
-
-            switch (elementoSeleccionado) {
-                case -1 ->
-                    inicio.mostrarError(28, inicio);
-                case -2 ->
-                    System.out.println("El usuario ha cancelado la operación");
-                default -> {
-                    Object[] opciones = {inicio.getIdioma().get(24), inicio.getIdioma().get(25)};
-                    int confirm = JOptionPane.showOptionDialog(inicio, inicio.getIdioma().get(22) + " (" + inicio.getVectorLibros().get(elementoSeleccionado).getNombre() + ")", inicio.getIdioma().get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
-
-                    switch (confirm) {
-                        case JOptionPane.YES_OPTION -> {
-                            inicio.getListModel().removeElementAt(elementoSeleccionado);
-                            inicio.getVectorLibros().remove(elementoSeleccionado);
-                        }
-                        default -> {
-                        }
-                    }
-                }
-            }
+//            int elementoSeleccionado = inicio.cuadroBuscar();
+//
+//            switch (elementoSeleccionado) {
+//                case -1 ->
+//                    inicio.mostrarError(28, inicio);
+//                case -2 ->
+//                    System.out.println("El usuario ha cancelado la operación");
+//                default -> {
+//                    Object[] opciones = {inicio.getIdioma().get(24), inicio.getIdioma().get(25)};
+//                    int confirm = JOptionPane.showOptionDialog(inicio, inicio.getIdioma().get(22) + " (" + inicio.getVectorLibros().get(elementoSeleccionado).getNombre() + ")", inicio.getIdioma().get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+//
+//                    switch (confirm) {
+//                        case JOptionPane.YES_OPTION -> {
+//                            inicio.getListModel().removeElementAt(elementoSeleccionado);
+//                            inicio.getVectorLibros().remove(elementoSeleccionado);
+//                        }
+//                        default -> {
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 
