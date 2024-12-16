@@ -35,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import utils.GuardarDatos;
 
 /**
  *
@@ -363,6 +364,7 @@ public class IPO_Pr4 {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            inicio.guardarDatos();
             System.exit(0);
         }
     }
@@ -380,6 +382,7 @@ public class IPO_Pr4 {
         jMenuItemTextNuevo = idiomas.getIdioma(cual).get(5);
         jMenuItemTextBorrar = idiomas.getIdioma(cual).get(6);
         jMenuItemTextModificar = idiomas.getIdioma(cual).get(20);
+        jMenuItemTextConsultar = idiomas.getIdioma(cual).get(35);
         jMenuTextAyuda = idiomas.getIdioma(cual).get(4);
         jMenuItemTextAbrir = idiomas.getIdioma(cual).get(11);
         jMenuItemTextGuardar = idiomas.getIdioma(cual).get(12);
@@ -396,6 +399,7 @@ public class IPO_Pr4 {
         menuItemNuevo.setText(jMenuItemTextNuevo);//Nuevo
         menuItemBorrar.setText(jMenuItemTextBorrar);//Borrar
         menuItemModificar.setText(jMenuItemTextModificar);//Modificar
+        menuItemConsultar.setText(jMenuItemTextConsultar);//Consultar
         menuItemAyuda.setText(jMenuItemTextAyuda);//Ayuda
     }
 
@@ -407,4 +411,6 @@ public class IPO_Pr4 {
     public static void cargarDatos(String ruta) {
         inicio.cargarDatos(ruta);
     }
+    
+    
 }
