@@ -17,6 +17,8 @@
 package interfaces;
 
 import IPO_Pr4.Libro;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,13 +28,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author Miguel González García
  */
-public final class Edicion extends javax.swing.JPanel {
+public final class Consulta extends javax.swing.JPanel {
 
     private final Inicio panelAnterior;
     private final Libro libro;
@@ -48,19 +52,25 @@ public final class Edicion extends javax.swing.JPanel {
      * @param idioma idioma seleccionado
      * @param imagenes imágenes según el idioma
      */
-    public Edicion(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
+    public Consulta(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
-        this.saveButton.requestFocusInWindow();
+//        this.saveButton.requestFocusInWindow();
         this.panelAnterior = panelAnterior;
         this.libro = libro;
         this.idioma = idioma;
         this.imagenes = imagenes;
         cambiarIdioma();
 
-        jTextFieldNombre.setText(libro.getNombre());
-        jTextFieldAutor.setText(libro.getAutor());
-        jTextFieldGenero.setText(libro.getGenero());
-        jTextFieldAnio.setText(libro.getAño());
+        SwingUtilities.invokeLater(() -> {
+            jTextFieldNombre.setText(libro.getNombre());
+            ajustarTam(jTextFieldNombre);
+            jTextFieldAutor.setText(libro.getAutor());
+            ajustarTam(jTextFieldAutor);
+            jTextFieldGenero.setText(libro.getGenero());
+            ajustarTam(jTextFieldGenero);
+            jTextFieldAnio.setText(libro.getAño());
+            ajustarTam(jTextFieldAnio);
+        });
 
         if (libro.tieneImagen()) {
             ImageIcon imageIcon = new ImageIcon(new ImageIcon(libro.getRutaImagen()).getImage().getScaledInstance(82, 125, Image.SCALE_SMOOTH));
@@ -69,9 +79,9 @@ public final class Edicion extends javax.swing.JPanel {
             imagenLibro.setIcon(imagenes.get(0));
         }
 
-        saveButton.addActionListener(new SaveListener(this));
+//        saveButton.addActionListener(new SaveListener(this));
         volverButton.addActionListener(new VolverListener(this));
-        addImage.addActionListener(new AddImageListener(this));
+//        addImage.addActionListener(new AddImageListener(this));
     }
 
     /**
@@ -93,11 +103,20 @@ public final class Edicion extends javax.swing.JPanel {
         jLabelAutor.setText(idioma.get(8));
         jLabelGenero.setText(idioma.get(9));
         jLabelAnio.setText(idioma.get(10));
-        saveButton.setText(idioma.get(16));
-        volverButton.setText(idioma.get(34));
-        addImage.setText(idioma.get(27));
+//        saveButton.setText(idioma.get(16));
+        volverButton.setText(idioma.get(15));
+//        addImage.setText(idioma.get(27));
         this.revalidate();
         this.repaint();
+    }
+
+    private static void ajustarTam(JTextField textField) {
+        FontMetrics metrics = textField.getFontMetrics(textField.getFont());
+        int anchoTexto = metrics.stringWidth(textField.getText());
+
+        // Ajustar el ancho con un pequeño margen
+        textField.setPreferredSize(new Dimension(anchoTexto + 10, textField.getPreferredSize().height));
+        textField.revalidate(); // Recalcular el diseño
     }
 
     /**
@@ -125,48 +144,45 @@ public final class Edicion extends javax.swing.JPanel {
         jTextFieldGenero = new javax.swing.JTextField();
         jLabelAnio = new javax.swing.JLabel();
         jTextFieldAnio = new javax.swing.JTextField();
-        saveButton = new javax.swing.JButton();
         volverButton = new javax.swing.JButton();
         imagenLibro = new javax.swing.JLabel();
-        addImage = new javax.swing.JButton();
 
+        setFocusable(false);
+
+        jTextFieldNombre.setEditable(false);
         jTextFieldNombre.setText("jTextField1");
 
         jLabelNombre.setText("Nombre");
 
         jLabelAutor.setText("Autor");
 
+        jTextFieldAutor.setEditable(false);
         jTextFieldAutor.setText("jTextField2");
 
         jLabelGenero.setText("Genero");
 
+        jTextFieldGenero.setEditable(false);
         jTextFieldGenero.setText("jTextField3");
 
         jLabelAnio.setText("Año");
 
+        jTextFieldAnio.setEditable(false);
         jTextFieldAnio.setText("jTextField4");
 
-        saveButton.setText("Guardar");
-
-        volverButton.setText("Cancelar");
-
-        addImage.setText("Añadir imagen");
+        volverButton.setText("Volver");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(234, 234, 234)
-                        .addComponent(volverButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(saveButton)
-                        .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(volverButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextFieldAnio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                             .addComponent(jTextFieldGenero, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelNombre, javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,13 +191,9 @@ public final class Edicion extends javax.swing.JPanel {
                             .addComponent(jLabelAnio, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldAutor, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(imagenLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(addImage)))
-                        .addGap(29, 29, 29))))
+                        .addGap(33, 33, 33)
+                        .addComponent(imagenLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,22 +214,17 @@ public final class Edicion extends javax.swing.JPanel {
                         .addComponent(jTextFieldGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(imagenLibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelAnio)
-                    .addComponent(addImage))
+                .addComponent(jLabelAnio)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveButton)
-                    .addComponent(volverButton))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addComponent(volverButton)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addImage;
     private javax.swing.JLabel imagenLibro;
     private javax.swing.JLabel jLabelAnio;
     private javax.swing.JLabel jLabelAutor;
@@ -227,49 +234,29 @@ public final class Edicion extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldAutor;
     private javax.swing.JTextField jTextFieldGenero;
     private javax.swing.JTextField jTextFieldNombre;
-    public javax.swing.JButton saveButton;
-    private javax.swing.JButton volverButton;
+    public javax.swing.JButton volverButton;
     // End of variables declaration//GEN-END:variables
-
-    class SaveListener implements ActionListener {
-
-        Edicion panelEdicion;
-
-        public SaveListener(Edicion panelEdicion) {
-            this.panelEdicion = panelEdicion;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (jTextFieldNombre.getText().isBlank() || jTextFieldAutor.getText().isBlank() || jTextFieldGenero.getText().isBlank()) {
-                panelAnterior.mostrarError(26, panelEdicion);
-            } else {
-                panelEdicion.guardarLibro();
-                panelAnterior.getDialogoEmergente().dispose();
-            }
-        }
-    }
 
     class VolverListener implements ActionListener {
 
-        Edicion panelEdicion;
+        Consulta panelEdicion;
 
-        public VolverListener(Edicion panelEdicion) {
+        public VolverListener(Consulta panelEdicion) {
             this.panelEdicion = panelEdicion;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            panelAnterior.restaurarLibro();
+//            panelAnterior.restaurarLibro();
             panelAnterior.getDialogoEmergente().dispose();
         }
     }
 
     static class AddImageListener implements ActionListener {
 
-        private final Edicion nuevo;
+        private final Consulta nuevo;
 
-        public AddImageListener(Edicion nuevo) {
+        public AddImageListener(Consulta nuevo) {
             this.nuevo = nuevo;
         }
 

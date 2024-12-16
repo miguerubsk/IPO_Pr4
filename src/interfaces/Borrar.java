@@ -32,7 +32,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Miguel González García
  */
-public final class Edicion extends javax.swing.JPanel {
+public final class Borrar extends javax.swing.JPanel {
 
     private final Inicio panelAnterior;
     private final Libro libro;
@@ -48,7 +48,7 @@ public final class Edicion extends javax.swing.JPanel {
      * @param idioma idioma seleccionado
      * @param imagenes imágenes según el idioma
      */
-    public Edicion(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
+    public Borrar(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
         this.saveButton.requestFocusInWindow();
         this.panelAnterior = panelAnterior;
@@ -71,7 +71,7 @@ public final class Edicion extends javax.swing.JPanel {
 
         saveButton.addActionListener(new SaveListener(this));
         volverButton.addActionListener(new VolverListener(this));
-        addImage.addActionListener(new AddImageListener(this));
+//        addImage.addActionListener(new AddImageListener(this));
     }
 
     /**
@@ -93,9 +93,9 @@ public final class Edicion extends javax.swing.JPanel {
         jLabelAutor.setText(idioma.get(8));
         jLabelGenero.setText(idioma.get(9));
         jLabelAnio.setText(idioma.get(10));
-        saveButton.setText(idioma.get(16));
-        volverButton.setText(idioma.get(34));
-        addImage.setText(idioma.get(27));
+        saveButton.setText(idioma.get(6));
+        volverButton.setText(idioma.get(34)); //15
+//        addImage.setText(idioma.get(27));
         this.revalidate();
         this.repaint();
     }
@@ -128,29 +128,30 @@ public final class Edicion extends javax.swing.JPanel {
         saveButton = new javax.swing.JButton();
         volverButton = new javax.swing.JButton();
         imagenLibro = new javax.swing.JLabel();
-        addImage = new javax.swing.JButton();
 
+        jTextFieldNombre.setEditable(false);
         jTextFieldNombre.setText("jTextField1");
 
         jLabelNombre.setText("Nombre");
 
         jLabelAutor.setText("Autor");
 
+        jTextFieldAutor.setEditable(false);
         jTextFieldAutor.setText("jTextField2");
 
         jLabelGenero.setText("Genero");
 
+        jTextFieldGenero.setEditable(false);
         jTextFieldGenero.setText("jTextField3");
 
         jLabelAnio.setText("Año");
 
+        jTextFieldAnio.setEditable(false);
         jTextFieldAnio.setText("jTextField4");
 
         saveButton.setText("Guardar");
 
         volverButton.setText("Cancelar");
-
-        addImage.setText("Añadir imagen");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -160,8 +161,8 @@ public final class Edicion extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(234, 234, 234)
-                        .addComponent(volverButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(volverButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(saveButton)
                         .addContainerGap())
@@ -175,12 +176,8 @@ public final class Edicion extends javax.swing.JPanel {
                             .addComponent(jLabelAnio, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldAutor, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(imagenLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(addImage)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addComponent(imagenLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29))))
         );
         layout.setVerticalGroup(
@@ -202,22 +199,19 @@ public final class Edicion extends javax.swing.JPanel {
                         .addComponent(jTextFieldGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(imagenLibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelAnio)
-                    .addComponent(addImage))
+                .addComponent(jLabelAnio)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveButton)
                     .addComponent(volverButton))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addImage;
     private javax.swing.JLabel imagenLibro;
     private javax.swing.JLabel jLabelAnio;
     private javax.swing.JLabel jLabelAutor;
@@ -228,14 +222,14 @@ public final class Edicion extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldGenero;
     private javax.swing.JTextField jTextFieldNombre;
     public javax.swing.JButton saveButton;
-    private javax.swing.JButton volverButton;
+    public javax.swing.JButton volverButton;
     // End of variables declaration//GEN-END:variables
 
     class SaveListener implements ActionListener {
 
-        Edicion panelEdicion;
+        Borrar panelEdicion;
 
-        public SaveListener(Edicion panelEdicion) {
+        public SaveListener(Borrar panelEdicion) {
             this.panelEdicion = panelEdicion;
         }
 
@@ -244,7 +238,7 @@ public final class Edicion extends javax.swing.JPanel {
             if (jTextFieldNombre.getText().isBlank() || jTextFieldAutor.getText().isBlank() || jTextFieldGenero.getText().isBlank()) {
                 panelAnterior.mostrarError(26, panelEdicion);
             } else {
-                panelEdicion.guardarLibro();
+//                panelEdicion.guardarLibro();
                 panelAnterior.getDialogoEmergente().dispose();
             }
         }
@@ -252,9 +246,9 @@ public final class Edicion extends javax.swing.JPanel {
 
     class VolverListener implements ActionListener {
 
-        Edicion panelEdicion;
+        Borrar panelEdicion;
 
-        public VolverListener(Edicion panelEdicion) {
+        public VolverListener(Borrar panelEdicion) {
             this.panelEdicion = panelEdicion;
         }
 
@@ -267,9 +261,9 @@ public final class Edicion extends javax.swing.JPanel {
 
     static class AddImageListener implements ActionListener {
 
-        private final Edicion nuevo;
+        private final Borrar nuevo;
 
-        public AddImageListener(Edicion nuevo) {
+        public AddImageListener(Borrar nuevo) {
             this.nuevo = nuevo;
         }
 

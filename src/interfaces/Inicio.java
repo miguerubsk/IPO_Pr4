@@ -17,9 +17,12 @@
 package interfaces;
 
 import IPO_Pr4.Libro;
+import java.awt.BorderLayout;
 import utils.GuardarDatos;
 import utils.CargarDatos;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,10 +41,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -54,12 +60,14 @@ public final class Inicio extends javax.swing.JPanel {
     private final JFrame framePadre;
     public Nuevo nuevo;
     private Edicion edicion;
+    private Consulta consulta;
+    private Borrar borrado;
     private CargarDatos cd;
     private final String separador = " | ";
     public JDialog dialogoEmergente;
 
     private final DefaultListModel listModel;
-    private final DefaultListModel filteredListModel;
+//    private final DefaultListModel filteredListModel;
 
     ArrayList<String> idioma;
 
@@ -84,28 +92,31 @@ public final class Inicio extends javax.swing.JPanel {
         cambiarIdioma();
 
         this.listModel = new DefaultListModel();
-        this.filteredListModel = new DefaultListModel();
+//        this.filteredListModel = new DefaultListModel();
 
         addLibrosInicio();
 
-        list.setModel(filteredListModel);
-        campoBuscar.getDocument().addDocumentListener(new BuscarListener());
+        list.setModel(listModel);
+//        campoBuscar.getDocument().addDocumentListener(new BuscarListener());
 
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.setVisibleRowCount(5);
         list.addMouseListener(new MouseListener(this));
         setMinimumSize(new Dimension(500, 400));
-        addButton.addActionListener(new NuevoListener(this));
-        deleteButton.addActionListener(new EliminarListener(this));
-        modifyButton.addActionListener(new ModificarListener(this));
+//        addButton.addActionListener(new NuevoListener(this));
+//        deleteButton.addActionListener(new EliminarListener(this));
+//        modifyButton.addActionListener(new ModificarListener(this));
         Icon addIcon = new ImageIcon(new ImageIcon("images/icons/add.png").getImage().getScaledInstance(16, 16, Image.SCALE_DEFAULT));
         Icon deleteIcon = new ImageIcon(new ImageIcon("images/icons/delete.png").getImage().getScaledInstance(16, 16, Image.SCALE_DEFAULT));
         Icon modifyIcon = new ImageIcon(new ImageIcon("images/icons/edit.png").getImage().getScaledInstance(16, 16, Image.SCALE_DEFAULT));
-        addButton.setIcon(addIcon);
-        deleteButton.setIcon(deleteIcon);
-        modifyButton.setIcon(modifyIcon);
+//        addButton.setIcon(addIcon);
+//        deleteButton.setIcon(deleteIcon);
+//        modifyButton.setIcon(modifyIcon);
         setVisible(true);
+//        addButton.setVisible(false);
+//        deleteButton.setVisible(false);
+//        modifyButton.setVisible(false);
     }
 
     /**
@@ -127,11 +138,11 @@ public final class Inicio extends javax.swing.JPanel {
     }
 
     private void updateFilteredListModel(String filterText) {
-        filteredListModel.clear();
+//        filteredListModel.clear();
         for (int i = 0; i < listModel.getSize(); i++) {
             String item = listModel.getElementAt(i).toString();
             if (item.toLowerCase().contains(filterText.toLowerCase())) {
-                filteredListModel.addElement(item);
+//                filteredListModel.addElement(item);
             }
         }
     }
@@ -149,6 +160,7 @@ public final class Inicio extends javax.swing.JPanel {
         JButton botonAceptar = new JButton(idioma.get(3));
         botonAceptar.addActionListener(e2 -> dialogo.dispose());
         optionPane.setOptions(new Object[]{botonAceptar});
+        dialogo.getRootPane().setDefaultButton(botonAceptar);
         dialogo.setVisible(true);
     }
 
@@ -157,35 +169,195 @@ public final class Inicio extends javax.swing.JPanel {
      * @param inicio panel de inicio
      */
     public void gestionarEdicion(JPanel inicio) {
-        int elementoSeleccionado = list.getSelectedIndex();
-        if (elementoSeleccionado < 0) {
-            mostrarError(28, inicio);
-        } else {
-            list.setSelectedIndex(elementoSeleccionado);
-            list.ensureIndexIsVisible(elementoSeleccionado);
 
-            edicion = new Edicion((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
-            libroAnterior = vectorLibros.get(elementoSeleccionado);
-            vectorLibros.remove(elementoSeleccionado);
-            listModel.remove(elementoSeleccionado);
-            filteredListModel.remove(elementoSeleccionado);
+//        String userInput = JOptionPane.showInputDialog(null,
+//                idioma.get(32),
+//                idioma.get(31), JOptionPane.PLAIN_MESSAGE);
+        int elementoSeleccionado = cuadroBuscar();
 
-            dialogoEmergente = new JDialog(framePadre, idioma.get(20), true);
-            dialogoEmergente.setSize(new Dimension(500, 325));
-            dialogoEmergente.setLocationRelativeTo(framePadre);
-            dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-            dialogoEmergente.add(edicion);
+        switch (elementoSeleccionado) {
+            case -1 ->
+                mostrarError(28, inicio);
+            case -2 ->
+                System.out.println("El usuario ha cancelado la operación");
+            default -> {
+                edicion = new Edicion((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
+                libroAnterior = vectorLibros.get(elementoSeleccionado);
+                vectorLibros.remove(elementoSeleccionado);
+                listModel.remove(elementoSeleccionado);
+//            filteredListModel.remove(elementoSeleccionado);
 
-            dialogoEmergente.setVisible(true);
+                dialogoEmergente = new JDialog(framePadre, idioma.get(20), true);
+                dialogoEmergente.setSize(new Dimension(450, 325));
+                dialogoEmergente.setLocationRelativeTo(framePadre);
+                dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                dialogoEmergente.add(edicion);
+                
+                dialogoEmergente.getRootPane().setDefaultButton(edicion.saveButton);
 
-            dialogoEmergente.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    restaurarLibro();
-                    dialogoEmergente.dispose();
-                }
-            });
+                dialogoEmergente.setVisible(true);
+
+                dialogoEmergente.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        restaurarLibro();
+                        dialogoEmergente.dispose();
+                    }
+                });
+            }
         }
+        
+//        if (elementoSeleccionado == -1) {
+////            mostrarError(28, inicio);
+//        } else {
+////            list.setSelectedIndex(elementoSeleccionado);
+////            list.ensureIndexIsVisible(elementoSeleccionado);
+//
+//        }
+
+    }
+    
+    
+    public void gestionarConsulta(JPanel inicio) {
+
+//        String userInput = JOptionPane.showInputDialog(null,
+//                idioma.get(32),
+//                idioma.get(31), JOptionPane.PLAIN_MESSAGE);
+        int elementoSeleccionado = cuadroBuscar();
+
+        switch (elementoSeleccionado) {
+            case -1 ->
+                mostrarError(28, inicio);
+            case -2 ->
+                System.out.println("El usuario ha cancelado la operación");
+            default -> {
+                consulta = new Consulta((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
+//                libroAnterior = vectorLibros.get(elementoSeleccionado);
+//                vectorLibros.remove(elementoSeleccionado);
+//                listModel.remove(elementoSeleccionado);
+//            filteredListModel.remove(elementoSeleccionado);
+
+                dialogoEmergente = new JDialog(framePadre, idioma.get(35), true);
+                dialogoEmergente.setSize(new Dimension(450, 325));
+                dialogoEmergente.setLocationRelativeTo(framePadre);
+//                dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                dialogoEmergente.add(consulta);
+                
+                dialogoEmergente.getRootPane().setDefaultButton(consulta.volverButton);
+
+                dialogoEmergente.setVisible(true);
+
+                dialogoEmergente.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        restaurarLibro();
+                        dialogoEmergente.dispose();
+                    }
+                });
+            }
+        }
+        
+//        if (elementoSeleccionado == -1) {
+////            mostrarError(28, inicio);
+//        } else {
+////            list.setSelectedIndex(elementoSeleccionado);
+////            list.ensureIndexIsVisible(elementoSeleccionado);
+//
+//        }
+
+    }
+    
+    public void gestionarBorrado(JPanel inicio) {
+
+//        String userInput = JOptionPane.showInputDialog(null,
+//                idioma.get(32),
+//                idioma.get(31), JOptionPane.PLAIN_MESSAGE);
+        int elementoSeleccionado = cuadroBuscar();
+
+        switch (elementoSeleccionado) {
+            case -1 ->
+                mostrarError(28, inicio);
+            case -2 ->
+                System.out.println("El usuario ha cancelado la operación");
+            default -> {
+                borrado = new Borrar((Inicio) inicio, vectorLibros.get(elementoSeleccionado), idioma, imagenes);
+                libroAnterior = vectorLibros.get(elementoSeleccionado);
+                vectorLibros.remove(elementoSeleccionado);
+                listModel.remove(elementoSeleccionado);
+//            filteredListModel.remove(elementoSeleccionado);
+
+                dialogoEmergente = new JDialog(framePadre, idioma.get(6), true);
+                dialogoEmergente.setSize(new Dimension(450, 325));
+                dialogoEmergente.setLocationRelativeTo(framePadre);
+                dialogoEmergente.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                dialogoEmergente.add(borrado);
+                
+                dialogoEmergente.getRootPane().setDefaultButton(borrado.volverButton);
+
+                dialogoEmergente.setVisible(true);
+
+            }
+        }
+        
+//        if (elementoSeleccionado == -1) {
+////            mostrarError(28, inicio);
+//        } else {
+////            list.setSelectedIndex(elementoSeleccionado);
+////            list.ensureIndexIsVisible(elementoSeleccionado);
+//
+//        }
+
+    }
+
+    public int cuadroBuscar() {
+//        String userInput = JOptionPane.showInputDialog(null,
+//                idioma.get(32),
+//                idioma.get(31), JOptionPane.PLAIN_MESSAGE);
+        JPanel panel = new JPanel(new BorderLayout(10, 15));
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JLabel label = new JLabel(idioma.get(32));
+        panel.add(label, BorderLayout.NORTH);
+
+        JTextField textField = new JTextField(20);
+        panel.add(textField, BorderLayout.CENTER);
+
+        JButton okButton = new JButton(idioma.get(31));
+        JButton cancelButton = new JButton(idioma.get(34));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        JDialog dialog = new JDialog((Frame) null, idioma.get(31), true);
+        dialog.getContentPane().add(panel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        
+        dialog.getRootPane().setDefaultButton(okButton);
+
+        final int resultado[] = {-2};
+
+        okButton.addActionListener(e -> {
+            resultado[0] = -1;
+            for (Libro lib : vectorLibros) {
+                if (lib.getNombre().toLowerCase().equals(textField.getText().toLowerCase())) {
+                    resultado[0] = vectorLibros.indexOf(lib);
+                }
+            }
+            dialog.dispose(); // Cerrar el cuadro de diálogo
+        });
+
+        cancelButton.addActionListener(e -> {
+            resultado[0] = -2; // No devolver nada
+            dialog.dispose();
+        });
+
+        dialog.setVisible(true);
+
+        
+        return resultado[0];
     }
 
     /**
@@ -198,32 +370,33 @@ public final class Inicio extends javax.swing.JPanel {
         } else {
             vectorLibros.add(libro);
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
-            filteredListModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
+//            filteredListModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         }
     }
-
+   
     /**
      *
      */
     public void restaurarLibro() {
         vectorLibros.add(libroAnterior);
         listModel.addElement(libroAnterior.getNombre() + separador + libroAnterior.getAutor() + separador + libroAnterior.getGenero());
-        filteredListModel.addElement(libroAnterior.getNombre() + separador + libroAnterior.getAutor() + separador + libroAnterior.getGenero());
+//        filteredListModel.addElement(libroAnterior.getNombre() + separador + libroAnterior.getAutor() + separador + libroAnterior.getGenero());
     }
 
     /**
      *
      */
     public void cambiarIdioma() {
-        addButton.setText(idioma.get(5));
-        deleteButton.setText(idioma.get(6));
-        modifyButton.setText(idioma.get(20));
+//        addButton.setText(idioma.get(5));
+//        deleteButton.setText(idioma.get(6));
+//        modifyButton.setText(idioma.get(20));
         jLabelLibros.setText(idioma.get(17));
-        campoBuscar.setText(idioma.get(31));
-        if (filteredListModel != null) {
-            updateFilteredListModel("");
-        }
+//        campoBuscar.setText(idioma.get(31));
+//        if (filteredListModel != null) {
+//            updateFilteredListModel("");
+//        }
         imagenLang.setIcon(new ImageIcon(imagenes.get(1).getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
+
     }
 
     /**
@@ -281,10 +454,10 @@ public final class Inicio extends javax.swing.JPanel {
         Collections.sort(vectorLibros, (Libro p1, Libro p2) -> p1.getAutor().compareTo(p2.getAutor()));
 
         listModel.clear();
-        filteredListModel.clear();
+//        filteredListModel.clear();
         vectorLibros.forEach(libro -> {
             listModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
-            filteredListModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
+//            filteredListModel.addElement(libro.getNombre() + separador + libro.getAutor() + separador + libro.getGenero());
         });
         updateFilteredListModel("");
     }
@@ -387,7 +560,7 @@ public final class Inicio extends javax.swing.JPanel {
             switch (confirm) {
                 case JOptionPane.YES_OPTION -> {
                     listModel.removeElementAt(elementoSeleccionado);
-                    filteredListModel.removeElementAt(elementoSeleccionado);
+//                    filteredListModel.removeElementAt(elementoSeleccionado);
                     vectorLibros.remove(elementoSeleccionado);
                     updateFilteredListModel("");
                 }
@@ -415,8 +588,8 @@ public final class Inicio extends javax.swing.JPanel {
         }
 
         private void filterList() {
-            String searchText = campoBuscar.getText();
-            updateFilteredListModel(searchText);
+//            String searchText = campoBuscar.getText();
+//            updateFilteredListModel(searchText);
         }
     }
 
@@ -431,13 +604,8 @@ public final class Inicio extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         list = new javax.swing.JList<>();
-        addButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
         jLabelLibros = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        modifyButton = new javax.swing.JButton();
         imagenLang = new javax.swing.JLabel();
-        campoBuscar = new javax.swing.JTextField();
 
         list.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         list.setModel(new javax.swing.AbstractListModel<String>() {
@@ -447,28 +615,8 @@ public final class Inicio extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(list);
 
-        addButton.setText("Nuevo");
-        addButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        deleteButton.setText("Eliminar");
-        deleteButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
         jLabelLibros.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabelLibros.setText("Libros");
-
-        jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        modifyButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        modifyButton.setLabel("Modificar");
-        modifyButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modifyButtonActionPerformed(evt);
-            }
-        });
-
-        campoBuscar.setText("jTextField1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -479,20 +627,9 @@ public final class Inicio extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelLibros)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(campoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabelLibros)
+                        .addGap(329, 329, 329)
+                        .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 14, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -501,36 +638,20 @@ public final class Inicio extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabelLibros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jSeparator1)
-                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(modifyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelLibros)
                     .addComponent(imagenLang, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(campoBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
-
-    }//GEN-LAST:event_modifyButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addButton;
-    private javax.swing.JTextField campoBuscar;
-    private javax.swing.JButton deleteButton;
     private javax.swing.JLabel imagenLang;
     private javax.swing.JLabel jLabelLibros;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JList<String> list;
-    private javax.swing.JButton modifyButton;
     // End of variables declaration//GEN-END:variables
 
 }

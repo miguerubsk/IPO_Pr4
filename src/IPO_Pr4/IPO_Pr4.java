@@ -35,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import utils.GuardarDatos;
 
 /**
  *
@@ -53,6 +54,7 @@ public class IPO_Pr4 {
     private static String jMenuItemTextNuevo;
     private static String jMenuItemTextBorrar;
     private static String jMenuItemTextModificar;
+    private static String jMenuItemTextConsultar;
     private static String textoAyuda;
     private static String tituloAyuda;
 
@@ -69,6 +71,7 @@ public class IPO_Pr4 {
     static private javax.swing.JMenuItem menuItemNuevo;
     static private javax.swing.JMenuItem menuItemBorrar;
     static private javax.swing.JMenuItem menuItemModificar;
+    static private javax.swing.JMenuItem menuItemConsultar;
     static private javax.swing.JMenuItem menuItemAyuda;
 
     static private Inicio inicio;
@@ -107,6 +110,7 @@ public class IPO_Pr4 {
         jMenuItemTextNuevo = idiomas.getIdioma(0).get(5);
         jMenuItemTextBorrar = idiomas.getIdioma(0).get(6);
         jMenuItemTextModificar = idiomas.getIdioma(0).get(20);
+        jMenuItemTextConsultar = idiomas.getIdioma(0).get(35);
     }
 
     /**
@@ -147,7 +151,7 @@ public class IPO_Pr4 {
         menuItemIdioma = new javax.swing.JMenu(); //Menu Idioma
         menuItemIdioma.setText(jMenuTextIdioma); //Idioma
         for (int i = 0; i < idiomas.getNumIdiomas(); i++) {
-            JMenuItem menuItemAux = new JMenuItem(idiomas.getIdioma(i).getFirst());
+            JMenuItem menuItemAux = new JMenuItem(idiomas.getIdioma(i).get(33));
             menuItemAux.addActionListener(new IdiomaListener(i));
             menuItemIdioma.add(menuItemAux);
             menuItemAux.setIcon(new ImageIcon(idiomas.getImagenesIdioma(i).get(1).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
@@ -155,23 +159,27 @@ public class IPO_Pr4 {
         menuItemSalir = new javax.swing.JMenuItem(); //Salir
         menuItemSalir.setText(jMenuItemTextSalir); //Salir
         menuItemSalir.addActionListener(new CloseListener()); //Salir
-        
+
         //Menu operaciones
         menuOperaciones = new javax.swing.JMenu();
         menuOperaciones.setText(jMenuItemTextOperaciones);
-        
+
         menuItemNuevo = new javax.swing.JMenuItem(); //Nuevo
         menuItemNuevo.setText(jMenuItemTextNuevo); //Nuevo
         menuItemNuevo.addActionListener(new NuevoListener(inicio)); //Nuevo
-        
+
         menuItemBorrar = new javax.swing.JMenuItem(); //Borrar
         menuItemBorrar.setText(jMenuItemTextBorrar); //Borrar
         menuItemBorrar.addActionListener(new EliminarListener(inicio)); //Borrar
-        
+
         menuItemModificar = new javax.swing.JMenuItem(); //Modificar
         menuItemModificar.setText(jMenuItemTextModificar); //Modificar
         menuItemModificar.addActionListener(new ModificarListener(inicio)); //modificar
         
+        menuItemConsultar = new javax.swing.JMenuItem();
+        menuItemConsultar.setText(jMenuItemTextConsultar);
+        menuItemConsultar.addActionListener(new ConsultarListener(inicio));
+
         //Menu Ayuda
         menuItemAyuda = new javax.swing.JMenuItem();
         menuItemAyuda.setText(jMenuItemTextAyuda);
@@ -183,6 +191,8 @@ public class IPO_Pr4 {
         menuOperaciones.add(menuItemNuevo);
         menuOperaciones.add(menuItemBorrar);
         menuOperaciones.add(menuItemModificar);
+        menuOperaciones.add(menuItemConsultar);
+        
         //menuAyuda.add(menuItemAyuda);
         menuBar.add(menuArchivo);
         menuBar.add(menuOperaciones);
@@ -244,7 +254,7 @@ public class IPO_Pr4 {
             inicio.guardarDatos();
         }
     }
-    
+
     static class ModificarListener implements ActionListener {
 
         Inicio inicio;
@@ -256,6 +266,20 @@ public class IPO_Pr4 {
         @Override
         public void actionPerformed(ActionEvent e) {
             inicio.gestionarEdicion(inicio);
+        }
+    }
+    
+    static class ConsultarListener implements ActionListener {
+
+        Inicio inicio;
+
+        public ConsultarListener(Inicio JPanel) {
+            this.inicio = JPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            inicio.gestionarConsulta(inicio);
         }
     }
 
@@ -273,7 +297,7 @@ public class IPO_Pr4 {
             inicio.nuevo = new Nuevo(inicio, libro, inicio.getIdioma(), inicio.getImagenes());
 
             inicio.dialogoEmergente = new JDialog(frame, inicio.getIdioma().get(5), true);
-            inicio.dialogoEmergente.setSize(new Dimension(500, 325));
+            inicio.dialogoEmergente.setSize(new Dimension(450, 325));
             inicio.dialogoEmergente.setLocationRelativeTo(frame);
             inicio.dialogoEmergente.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             inicio.dialogoEmergente.add(inicio.nuevo);
@@ -293,21 +317,30 @@ public class IPO_Pr4 {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int elementoSeleccionado = inicio.getList().getSelectedIndex();
-            inicio.getList().setSelectedIndex(elementoSeleccionado);
-            inicio.getList().ensureIndexIsVisible(elementoSeleccionado);
+            
+            inicio.gestionarBorrado(inicio);
 
-            Object[] opciones = {inicio.getIdioma().get(24), inicio.getIdioma().get(25)};
-            int confirm = JOptionPane.showOptionDialog(inicio, inicio.getIdioma().get(22), inicio.getIdioma().get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
-
-            switch (confirm) {
-                case JOptionPane.YES_OPTION -> {
-                    inicio.getListModel().removeElementAt(elementoSeleccionado);
-                    inicio.getVectorLibros().remove(elementoSeleccionado);
-                }
-                default -> {
-                }
-            }
+//            int elementoSeleccionado = inicio.cuadroBuscar();
+//
+//            switch (elementoSeleccionado) {
+//                case -1 ->
+//                    inicio.mostrarError(28, inicio);
+//                case -2 ->
+//                    System.out.println("El usuario ha cancelado la operación");
+//                default -> {
+//                    Object[] opciones = {inicio.getIdioma().get(24), inicio.getIdioma().get(25)};
+//                    int confirm = JOptionPane.showOptionDialog(inicio, inicio.getIdioma().get(22) + " (" + inicio.getVectorLibros().get(elementoSeleccionado).getNombre() + ")", inicio.getIdioma().get(23), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+//
+//                    switch (confirm) {
+//                        case JOptionPane.YES_OPTION -> {
+//                            inicio.getListModel().removeElementAt(elementoSeleccionado);
+//                            inicio.getVectorLibros().remove(elementoSeleccionado);
+//                        }
+//                        default -> {
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 
@@ -331,6 +364,7 @@ public class IPO_Pr4 {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            inicio.guardarDatos();
             System.exit(0);
         }
     }
@@ -348,6 +382,7 @@ public class IPO_Pr4 {
         jMenuItemTextNuevo = idiomas.getIdioma(cual).get(5);
         jMenuItemTextBorrar = idiomas.getIdioma(cual).get(6);
         jMenuItemTextModificar = idiomas.getIdioma(cual).get(20);
+        jMenuItemTextConsultar = idiomas.getIdioma(cual).get(35);
         jMenuTextAyuda = idiomas.getIdioma(cual).get(4);
         jMenuItemTextAbrir = idiomas.getIdioma(cual).get(11);
         jMenuItemTextGuardar = idiomas.getIdioma(cual).get(12);
@@ -364,6 +399,7 @@ public class IPO_Pr4 {
         menuItemNuevo.setText(jMenuItemTextNuevo);//Nuevo
         menuItemBorrar.setText(jMenuItemTextBorrar);//Borrar
         menuItemModificar.setText(jMenuItemTextModificar);//Modificar
+        menuItemConsultar.setText(jMenuItemTextConsultar);//Consultar
         menuItemAyuda.setText(jMenuItemTextAyuda);//Ayuda
     }
 
@@ -375,4 +411,6 @@ public class IPO_Pr4 {
     public static void cargarDatos(String ruta) {
         inicio.cargarDatos(ruta);
     }
+    
+    
 }

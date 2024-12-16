@@ -50,7 +50,7 @@ public final class Nuevo extends javax.swing.JPanel {
      */
     public Nuevo(Inicio panelAnterior, Libro libro, ArrayList<String> idioma, ArrayList<ImageIcon> imagenes) {
         initComponents();
-        this.saveButton.requestFocusInWindow();
+//        this.saveButton.requestFocusInWindow();
         this.panelAnterior = panelAnterior;
         this.libro = libro;
         this.idioma = idioma;
@@ -87,7 +87,7 @@ public final class Nuevo extends javax.swing.JPanel {
         jLabelGenero.setText(idioma.get(9));
         jLabelAnio.setText(idioma.get(10));
         saveButton.setText(idioma.get(16));
-        volverButton.setText(idioma.get(15));
+        volverButton.setText(idioma.get(34));
         imagenLibro.setIcon(imagenes.get(0));
         addImage.setText(idioma.get(27));
         this.revalidate();
@@ -144,7 +144,7 @@ public final class Nuevo extends javax.swing.JPanel {
         saveButton.setContentAreaFilled(false);
         saveButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        volverButton.setText("Volver");
+        volverButton.setText("Cancelar");
 
         addImage.setText("Añadir imagen");
 
@@ -153,15 +153,9 @@ public final class Nuevo extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 248, Short.MAX_VALUE)
-                        .addComponent(volverButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(saveButton)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jTextFieldAnio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                             .addComponent(jTextFieldGenero, javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,13 +165,18 @@ public final class Nuevo extends javax.swing.JPanel {
                             .addComponent(jLabelGenero, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelAnio, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(imagenLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(addImage)))
-                        .addGap(30, 30, 30))))
+                                .addComponent(addImage))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(251, 251, 251)
+                        .addComponent(volverButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(saveButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
