@@ -1,12 +1,12 @@
 2
 es
-34
+35
 Archivo
 Idioma
 Salir
 Ayuda
-Añadir libro
-Borrar libro
+Añadir registro
+Borrar registro
 Nombre
 Autor
 Género
@@ -20,7 +20,7 @@ Guardar
 Libros
 Aviso
 No se puede Añadir un libro duplicado
-Modificar libro
+Modificar registro
 Información
 ¿Está seguro de querer borrar el libro?
 Confirmación
@@ -31,15 +31,16 @@ Añadir imagen
 Libro no encontrado
 Gestor de libros
 Operaciones
-Buscar
+Buscar registro
 Por favor, ingresa tu búsqueda:
 Español
 Cancelar
+Consultar registro
 2
 images/covers/portada.jpg
 images/es.png
 en
-34
+35
 Archive
 Language
 Exit
@@ -74,6 +75,7 @@ Search
 Please, enter your search:
 English
 Cancel
+Check book
 2
 images/covers/cover.jpg
 images/en.png
